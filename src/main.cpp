@@ -1,4 +1,4 @@
-#include "gates/Paulix.hpp"
+#include "gates/PauliX.hpp"
 #include <Eigen/Dense>
 #include <iostream>
 #include <SFML/Graphics.hpp>
