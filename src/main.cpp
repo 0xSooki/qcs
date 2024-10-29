@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 #include "gates/Paulix.hpp"
 #include <Eigen/Dense>
-=======
-//#include "./gates/x.hpp" should become PauliX
->>>>>>> b382a6f (Finalize the SFML initialization)
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
 int main() {
   // create the window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "My window");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Quantum Circuit Simulator");
 
     // run the program as long as the window is open
     while (window.isOpen())
