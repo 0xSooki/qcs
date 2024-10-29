@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 #include "gates/Paulix.hpp"
 #include <Eigen/Dense>
+=======
+//#include "./gates/x.hpp" should become PauliX
+>>>>>>> b382a6f (Finalize the SFML initialization)
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -19,8 +23,8 @@ int main() {
                 window.close();
         }
 
-        // clear the window with black color
-        window.clear(sf::Color::Black);
+        // clear the window with white color
+        window.clear(sf::Color::White);
 
         // draw everything here...
         // window.draw(...);

@@ -14,16 +14,22 @@ FetchContent_Declare(SFML
     SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(main src/main.cpp)
-target_link_libraries(main PRIVATE sfml-graphics)
-target_compile_features(main PRIVATE cxx_std_17)
+set(EIGEN3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/eigen")
+
+include_directories(${EIGEN3_INCLUDE_DIR})
+
+add_executable(QuantumCircuitSimulator src/main.cpp)
+target_include_directories(QuantumCircuitSimulator PRIVATE ${EIGEN3_INCLUDE_DIR})
+target_link_libraries(QuantumCircuitSimulator PRIVATE sfml-graphics)
+target_compile_features(QuantumCircuitSimulator PRIVATE cxx_std_17)
 
 if(WIN32)
     add_custom_command(
-        TARGET main
+        TARGET QuantumCircuitSimulator
         COMMENT "Copy OpenAL DLL"
         PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:main>
         VERBATIM)
+<<<<<<< HEAD
 endif()
 
 #set(EIGEN3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/eigen")
@@ -45,3 +51,6 @@ set(HEADER_FILES
 )
 
 #target_include_directories(main PRIVATE ${EIGEN3_INCLUDE_DIR})
+=======
+endif()
+>>>>>>> b382a6f (Finalize the SFML initialization)
