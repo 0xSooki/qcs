@@ -20,7 +20,7 @@
 
 
 # Shared objects (inc. Windows DLLs)
-
+.vscode
 
 # Executables
 *.exe
