@@ -1,16 +1,30 @@
-//#include "./gates/x.hpp" should become PauliX
-#include <Eigen/Dense>
-#include <iostream>
+#include <SFML/Graphics.hpp>
 
 int main() {
-  Eigen::VectorXcd q(2);
-  q << 1, 0;
+  // create the window
+    sf::RenderWindow window(sf::VideoMode(800, 600), "Quantum Circuit Simulator");
 
-  std::cout << "|0> = " << q << std::endl;
+    // run the program as long as the window is open
+    while (window.isOpen())
+    {
+        // check all the window's events that were triggered since the last iteration of the loop
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            // "close requested" event: we close the window
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
 
-  // PauliX x;
-  // Eigen::MatrixXcd result = x * q;
+        // clear the window with white color
+        window.clear(sf::Color::White);
 
-  // std::cout << "X|0> = " << result << std::endl;
-  return 0;
+        // draw everything here...
+        // window.draw(...);
+
+        // end the current frame
+        window.display();
+    }
+
+    return 0;
 }
