@@ -1,13 +1,43 @@
-# Project Name (replace here!)
+# Circuit simulator-2
 
-This is the template for the projects. Please copy the project description here. 
-You can use Markdown language to render it as formatted **HTML** file.
+## Basic Features (Minimum Requirements)
+The following are the essential features needed to pass the project. They are required but do not provide extra credit.
+
+
+1. **Basic Quantum Components:** Implement core quantum gates such as Pauli-X (NOT), Pauli-Y, Pauli-Z, Hadamard (H), and CNOT gates.
+2. **Graphical User Interface (GUI):** Develop a graphical interface for users to design and simulate quantum circuits. The interface should allow users to:
+    - Add, move, connect, and remove quantum gates and qubits.
+    - Visualize the evolution of quantum states.
+3. **Circuit Persistence:** Allow users to save and load quantum circuits to and from files, preserving their structure and configurations.
+4. **Quantum State Calculations:** Compute and display the final state vector of the quantum circuit after the gates are applied.
+5. **Ready-made Quantum Circuits:** Include several pre-built circuits (e.g., Bell state generation, quantum teleportation) to demonstrate the program’s functionality.
+
+## Additional Features (Optional for Higher Grades)
+These features are worth additional points (usually two points each) and can improve your grade. Confirm with your teaching assistant if you have ideas for additional features not listed below.
+
+1. **Quantum Measurement:** Implement measurement functionality that collapses quantum states to either |0⟩ or |1⟩, showing the probabilities of each outcome.
+2. **Parameterized Quantum Gates:** Add parameterized gates like rotation gates (e.g., RX, RY, RZ) that accept angles as input.
+3. **Quantum Noise Models:** Simulate realistic quantum noise models, such as depolarizing noise or phase damping, which can be toggled on or off for error simulation.
+4. **Entanglement Visualization:** Show visual indications of entanglement between qubits, helping users understand quantum correlations.
+5. **Quantum Fourier Transform (QFT):** Implement and demonstrate the Quantum Fourier Transform, displaying its impact on multi-qubit systems.
+6. **Circuit Optimization:** Implement basic optimization features that minimize the number of gates or simplify operations within the circuit.
+7. **Time and Frequency Domain Analysis:** Visualize the effects of quantum gates over time or across frequency domains, similar to classical simulators' time and frequency graphs (adapted for quantum systems).
+
+## Advanced Features (Challenging for Extra Credit)
+For a more challenging experience and extra points, you can implement one or more of these advanced features.
+
+1. **Quantum Algorithm Simulation:** Implement basic quantum algorithms like Grover’s search or Shor’s algorithm, simulating their steps and outcomes.
+2. **Quantum Circuit Compilation:** Add the capability to compile quantum circuits to hardware-specific gate sets (e.g., IBM Q or Rigetti’s gate sets).
+3. **Quantum Error Correction:** Implement simple quantum error correction codes, such as the three-qubit bit flip code or the Shor code, and simulate their operation.
+4. **Tensor Network Simulation:** Introduce a tensor network-based simulation approach for efficient simulation of large quantum circuits with many qubits.
+5. **Multi-qubit Gate Decomposition:** Allow for the decomposition of multi-qubit gates (e.g., Toffoli or Fredkin) into universal one- and two-qubit gates.
 
 # Group
-- Member 1
-- Member 2
-- Member 3
-- Member 4
+- bence.sooki-toth@aalto.fi
+- ha.k.do@aalto.fi
+- henna.makiluoma@aalto.fi
+- emma.erdei@aalto.fi
+- matti.viljamaa@aalto.fi
 
 # Repository organization
 Your project implementation should follow the skelaton organization in this repository.

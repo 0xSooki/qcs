@@ -47,3 +47,7 @@ dkms.conf
 
 # Build directory
 build
+html
+latex
+.DS_Store
+.cache
