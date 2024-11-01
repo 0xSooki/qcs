@@ -16,6 +16,7 @@ set(SRC_FILES
 #[[
 set(SRC_FILES
     src/main.cpp
+    src/file_io.cpp 
     src/QuantumCircuit.cpp
     src/Qubit.cpp
     src/Gate.cpp
@@ -25,6 +26,7 @@ set(SRC_FILES
 
 # For IDEs
 set(HEADER_FILES
+    src/file_io.hpp 
     src/QuantumCircuit.h
     src/Qubit.h
     src/Gate.hpp
