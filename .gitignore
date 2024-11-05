@@ -20,7 +20,7 @@
 
 
 # Shared objects (inc. Windows DLLs)
-
+.vscode
 
 # Executables
 *.exe
@@ -52,5 +52,4 @@ latex
 .DS_Store
 .cache
 
-# Ignor .vscode
-.vscode/
+
