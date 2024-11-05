@@ -51,3 +51,6 @@ html
 latex
 .DS_Store
 .cache
+
+# Ignor .vscode
+.vscode/
