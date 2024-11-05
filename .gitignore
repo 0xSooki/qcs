@@ -20,7 +20,9 @@
 
 
 # Shared objects (inc. Windows DLLs)
-.vscode
+.vscode/
+.gitignore
+CMakeLists.txt
 
 # Executables
 *.exe
