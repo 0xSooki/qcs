@@ -50,7 +50,7 @@ enable_testing()
 
 add_executable(
   tests
-  tests/Gate_test.cc
+  tests/PauliGates_test.cc
 )
 target_link_libraries(
 tests
