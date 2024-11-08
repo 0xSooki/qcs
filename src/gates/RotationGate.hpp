@@ -5,14 +5,15 @@
 #include <Eigen/Dense>
 #include <cmath>
 #include <complex>
-#include <iostream>
-#include <ostream>
+#include <string>
+#include <vector>
 
 enum Axis {
-  X,
-  Y,
-  Z,
+  X = 0,
+  Y = 1,
+  Z = 2,
 };
+
 std::complex<double> roundWithPrecision(std::complex<double> c) {
   double n = 4.0;
   std::complex<double> result(
@@ -44,26 +45,51 @@ public:
    * @param teta The angle of the rotation in radians (has a period of 4*pi)
    */
 
-  RotationGate(Axis axis, double teta) : Gate(2) {
+  RotationGate(Axis axis, double teta, std::vector<int> qubits,
+               std::vector<int> controls = {})
+      : Gate(2, qubits, controls) {
+    teta_ = teta;
     std::complex<double> i(0.0, 1.0);
     std::complex<double> teta_comp(teta / 2, 0.0);
     if (axis == Z) {
       (*this)(0, 0) = roundWithPrecision(std::exp(-1.0 * i * teta_comp));
       (*this)(1, 1) = roundWithPrecision(std::exp(i * teta_comp));
-    }
-    if (axis == X) {
-      (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
-      (*this)(0, 1) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
-      (*this)(1, 0) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
-      (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
-    }
-    if (axis == Y) {
-      (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
-      (*this)(0, 1) = roundWithPrecision(-1.0 * std::sin(teta_comp));
-      (*this)(1, 0) = roundWithPrecision(std::sin(teta_comp));
-      (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
+      axis_ = "Z";
+    } else {
+      if (axis == X) {
+        (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
+        (*this)(0, 1) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
+        (*this)(1, 0) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
+        (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
+        axis_ = "Z";
+      } else {
+        if (axis == Y) {
+          (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
+          (*this)(0, 1) = roundWithPrecision(-1.0 * std::sin(teta_comp));
+          (*this)(1, 0) = roundWithPrecision(std::sin(teta_comp));
+          (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
+          axis_ = "Y";
+        } else {
+          axis_ = "reee";
+          throw std::invalid_argument("Invalid axis");
+        }
+      }
     }
   }
+  /**
+   * @brief Gives the string representation of the gate.
+   *
+   * @return The string representation of the gate, in format
+   * "R"+"axis"+"(angle)".
+   */
+  std::string to_string() const {
+    std::string r = "R" + this->axis_ + "(" + std::to_string(teta_) + ")";
+    return r;
+  }
+
+private:
+  std::string axis_;
+  double teta_;
 };
 
 #endif // ROTATIONGATE_HPP

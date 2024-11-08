@@ -19,10 +19,18 @@ public:
    * (0,0) (1,0)
    * (1,0) (0,0)
    */
-  PauliX() : RotationGate(X, -M_PI) {
+  PauliX(std::vector<int> qubits, std::vector<int> controls = {})
+      : RotationGate(X, -M_PI, qubits, controls) {
     std::complex<double> i_minus(0.0, -1.0);
     (*this) << (i_minus * (*this));
   };
+  /**
+   * @brief Gives the string representation of the gate.
+   *
+   * @return The string representation of the gate, in format
+   * "X".
+   */
+  std::string to_string() const { return "X"; }
   /**
    * @brief Destructor for the PauliX class.
    */
@@ -42,10 +50,18 @@ public:
    * (0,0) (0,-1)
    * (0,1)  (0,0)
    */
-  PauliY() : RotationGate(Y, -M_PI) {
+  PauliY(std::vector<int> qubits, std::vector<int> controls = {})
+      : RotationGate(Y, -M_PI, qubits, controls) {
     std::complex<double> i_minus(0.0, -1.0);
     (*this) << (i_minus * (*this));
   };
+  /**
+   * @brief Gives the string representation of the gate.
+   *
+   * @return The string representation of the gate, in format
+   * "Y".
+   */
+  std::string to_string() const { return "Y"; }
   /**
    * @brief Destructor for the PauliY class.
    */
@@ -65,10 +81,18 @@ public:
    * @brief Constructs a PauliZ gate, by calling the parent constructor with the
    * set parameters.
    */
-  PauliZ() : RotationGate(Z, -M_PI) {
+  PauliZ(std::vector<int> qubits, std::vector<int> controls = {})
+      : RotationGate(Z, -M_PI, qubits, controls) {
     std::complex<double> i_minus(0.0, -1.0);
     (*this) << (i_minus * (*this));
   };
+  /**
+   * @brief Gives the string representation of the gate.
+   *
+   * @return The string representation of the gate, in format
+   * "Z".
+   */
+  std::string to_string() const { return "Z"; }
   /**
    * @brief Destructor for the PauliZ class.
    */

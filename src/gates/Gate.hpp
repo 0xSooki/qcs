@@ -28,7 +28,7 @@ public:
    *
    * @param dim The dimension of the square matrix (number of rows and columns).
    */
-  Gate(int dim, std::vector<int> qubits, std::vector<int> controls)
+  Gate(int dim, std::vector<int> qubits, std::vector<int> controls = {})
       : Eigen::MatrixXcd() {
     this->resize(dim, dim);
     this->setZero();
