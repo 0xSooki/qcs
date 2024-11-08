@@ -1,7 +1,7 @@
 #ifndef ROTATIONGATE_HPP
 #define ROTATIONGATE_HPP
 
-#include "gate.hpp"
+#include "Gate.hpp"
 #include <Eigen/Dense>
 #include <cmath>
 #include <complex>
