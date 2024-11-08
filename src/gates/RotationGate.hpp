@@ -51,29 +51,29 @@ public:
     teta_ = teta;
     std::complex<double> i(0.0, 1.0);
     std::complex<double> teta_comp(teta / 2, 0.0);
-    if (axis == Z) {
+    switch (axis) {
+    case Z:
       (*this)(0, 0) = roundWithPrecision(std::exp(-1.0 * i * teta_comp));
       (*this)(1, 1) = roundWithPrecision(std::exp(i * teta_comp));
       axis_ = "Z";
-    } else {
-      if (axis == X) {
-        (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
-        (*this)(0, 1) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
-        (*this)(1, 0) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
-        (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
-        axis_ = "Z";
-      } else {
-        if (axis == Y) {
-          (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
-          (*this)(0, 1) = roundWithPrecision(-1.0 * std::sin(teta_comp));
-          (*this)(1, 0) = roundWithPrecision(std::sin(teta_comp));
-          (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
-          axis_ = "Y";
-        } else {
-          axis_ = "reee";
-          throw std::invalid_argument("Invalid axis");
-        }
-      }
+      break;
+    case X:
+      (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
+      (*this)(0, 1) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
+      (*this)(1, 0) = roundWithPrecision(i * -1.0 * std::sin(teta_comp));
+      (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
+      axis_ = "X";
+      break;
+    case Y:
+      (*this)(0, 0) = roundWithPrecision(std::cos(teta_comp));
+      (*this)(0, 1) = roundWithPrecision(-1.0 * std::sin(teta_comp));
+      (*this)(1, 0) = roundWithPrecision(std::sin(teta_comp));
+      (*this)(1, 1) = roundWithPrecision(std::cos(teta_comp));
+      axis_ = "Y";
+      break;
+    default:
+      axis_ = "reee";
+      throw std::invalid_argument("Invalid axis");
     }
   }
   /**
