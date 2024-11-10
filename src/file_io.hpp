@@ -2,7 +2,7 @@
 #define FILE_IO_HPP
 
 #include <string>
-#include <QuantumCircuit.h> 
+#include <QuantumCircuit.hpp> 
 /**
  * Write a quantumn circuit into a file
  * @param circuit QuantumCircuit object to write

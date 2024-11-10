@@ -13,8 +13,9 @@ class QuantumCircuit{
 
         // Methods to add Qubits and apply Gates
         void addQubits(); // add qubits to the circuit
-        void applyGate(const Gate& gate, int qubitIndex); // Apply a single-qubit gate
-        void applyGate(const Gate& gate, int controlQubit, int targetQubit); // Apply two qubits gate with control and target
+        
+        // Apply applyGate function for single-qubit and two qubit with control and target
+        void applyGate(const Gate& gate, const std::vector<int>& qubitIndices)
 
         // Get the current state vector
         Eigen::VectorXcd getCurrentState() const;
@@ -26,9 +27,7 @@ class QuantumCircuit{
     private:
         int numQubits; 
         StateVector stateVector; // manage the state of the ciruit's qubits
-        std::vector<std::pair<Gate, std::pair<int, int>>> gates; // stor gates qubits indices
-
-}
-
+        std::vector<std::pair<Gate, std::pair<int, int>>> gates; // store gate and qubits indices
+};
 
 #endif //QUANTUMCIRCUIT_HPP
