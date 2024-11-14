@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <Eigen/Dense> // The library for matrix and vector 
+#include <Eigen/Dense> 
 #include "Gate.hpp" 
 #include "StateVector.hpp"
 
