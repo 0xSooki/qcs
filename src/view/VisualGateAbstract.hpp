@@ -2,11 +2,10 @@
 #define VISUAL_GATE_ABSTRACT_HPP
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 /**
  * @class VisualGateAbstract
- * @brief A class visualizing a quantum gate in GUI.
+ * @brief An abstract class for visual gate-like classes.
  */
 class VisualGateAbstract {
   protected:
@@ -15,33 +14,36 @@ class VisualGateAbstract {
     
   public:
     /**
-    * @brief Constructs a VisualGate with a specified position and abbreviation of the gate.
-    *
-    * Initializes a square to specified position with specified abbreviation inside of the square.
-    *
-    * @param pos Position where the gate should be drawn in GUI.
+    * @brief Default constructor for VisualGateAbstract class
     */
     VisualGateAbstract() = default;
 
     /**
-    * @brief Destructor for the VisualGate class.
+    * @brief Default destructor for the VisualGate class.
     */
     virtual ~VisualGateAbstract() = default;
 
     /**
-    * @brief Draws the gate to the window.
+    * @brief Pure virtual function for drawing the VisualGateAbstract to the screen.
     *
-    * @param window Window where the gate will be drawn.
+    * @param window Window where the VisualGateAbstract will be drawn.
     */
     virtual const void draw(sf::RenderWindow& window) const = 0;
 
     /**
-    * @brief Checks if the mouse click happened inside the gate
+    * @brief Pure virtual function for moving the gate to a specified location.
     *
-    * @param mouseX Position where the gate should be drawn in GUI.
-    * @param mouseY Text that will be visible inside the gate square.
+    * @param newPosition Vector of the position the gate will be moved.
+    */
+    virtual void moveTo(sf::Vector2f newPosition) = 0;
+
+    /**
+    * @brief Checks if the mouse click happened inside the abstract gate.
+    *
+    * @param mouseX Mouse position on x axis.
+    * @param mouseY Mouse position on y axis.
     * 
-    * @return true if the click was inside the gate, otherwise false
+    * @return True if the click was inside the gate, otherwise false.
     */
     bool isPressed(int mouseX, int mouseY) const {
       int gateX = gate_.getPosition().x;
@@ -53,8 +55,11 @@ class VisualGateAbstract {
         return false;
     }
 
-    virtual void moveTo(sf::Vector2f newPosition) = 0;
-
+    /**
+    * @brief Getter for the position of the gate.
+    *
+    * @return 2D vector of the position.
+    */
     const sf::Vector2f getPosition() const {
       return gate_.getPosition();
     }

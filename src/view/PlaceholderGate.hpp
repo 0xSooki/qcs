@@ -2,19 +2,21 @@
 #define PLACEHOLDER_GATE_HPP
 
 #include <SFML/Graphics.hpp>
-#include <iostream>
 
 #include "VisualGateAbstract.hpp"
 
 /**
  * @class PlaceholderGate
- * @brief A class visualizing a quantum gate in GUI.
+ * @brief A class visualizing a placeholder gate in GUI.
  */
 class PlaceholderGate : public VisualGateAbstract {
   private:
     static bool visible_;
     
   public:
+    /**
+    * @brief Default constructor for PlaceholderGate.
+    */
     PlaceholderGate() {
       gate_.setSize(sf::Vector2f(size_, size_));
       gate_.setFillColor(sf::Color(255, 0 , 0 , 100));
@@ -34,12 +36,12 @@ class PlaceholderGate : public VisualGateAbstract {
     }
 
     /**
-    * @brief Destructor for the PlaceholderGate class.
+    * @brief Default destructor for the PlaceholderGate class.
     */
     virtual ~PlaceholderGate() = default;
 
     /**
-    * @brief Draws the gate to the window.
+    * @brief Draws the placeholder gate to the window if it is set to be visible.
     *
     * @param window Window where the gate will be drawn.
     */
@@ -48,29 +50,34 @@ class PlaceholderGate : public VisualGateAbstract {
         window.draw(gate_);
     }
 
+    /**
+    * @brief Moves the placeholder gate to a specified position.
+    *
+    * @param newPosition Vector of the position the gate will be moved.
+    */
     void moveTo(sf::Vector2f newPosition) override {
       gate_.setPosition(newPosition);
     }
 
     /**
-    * @brief Setter for 'visible' variable
+    * @brief Setter for 'visible_' variable
     *
     * @param visible the value to be set
     */
     static void setVisible(bool visible) {      
-      /*if (visible) 
-        gate_.setFillColor(sf::Color(255, 0 , 0 , 100));
-      else
-        gate_.setFillColor(sf::Color(255, 0 , 0 , 0));*/
       visible_ = visible;
     }
 
+    /**
+    * @brief Getter for 'visible_' variable
+    * 
+    * @return True or false, depending on the value of 'visible_'.
+    */
     bool isVisible() {
       return visible_;
     }
 };
 
 bool PlaceholderGate::visible_ = false;
-//sf::RectangleShape PlaceholderGate::gate_(sf::Vector2f(1, 1));
 
 #endif // PLACEHOLDER_GATE_HPP

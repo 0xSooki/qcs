@@ -21,6 +21,13 @@ class VisualQubit {
     PlaceholderGate placeholder_;
 
   public:
+    /**
+    * @brief Constructs a VisualQubit with a specified position of the qubit.
+    *
+    * Initializes a line to specified position with initial state of the qubit before the line.
+    *
+    * @param pos Position where the qubit should be drawn in GUI.
+    */
     VisualQubit(const sf::Vector2f& pos) {
       qubit_.setSize(sf::Vector2f(800, 5));
       qubit_.setFillColor(sf::Color::Black);
@@ -41,14 +48,14 @@ class VisualQubit {
     }
 
     /**
-    * @brief Destructor for the VisualQubit class.
+    * @brief Default destructor for the VisualQubit class.
     */
     ~VisualQubit() = default;
 
     /**
-    * @brief Draws the qubit and it's gates to the window.
+    * @brief Draws the initial state, the qubit and it's gates to the window.
     *
-    * @param window Window where the qubit and gates will be drawn.
+    * @param window Window where everything will be drawn.
     */
     const void draw(sf::RenderWindow& window) const {
       window.draw(qubit_);
@@ -60,12 +67,23 @@ class VisualQubit {
         placeholder_.draw(window);
     }
 
+    /**
+    * @brief Determines if the mouse click happened inside the placeholder gate.
+    *
+    * @param mouseX Mouse position on x axis.
+    * @param mouseY Mouse position on y axis.
+    * 
+    * @return True if the placeholder gate is clicked, false otherwise.
+    */
     const bool isPlaceholderClicked(int mouseX, int mouseY) const {
       return gateSlots_.size() < 7
         ? placeholder_.isPressed(mouseX, mouseY)
         : false;
     }
 
+    /**
+    * @brief Switches the initial state of the qubit to be either 0 or 1.
+    */
     void switchInitialState() {
       initialState_ == "|0>"
         ? initialState_ = "|1>"
@@ -74,10 +92,23 @@ class VisualQubit {
       text_.setString(initialState_);
     }
 
+    /**
+    * @brief Determines if the mouse click happened inside the initial state text.
+    *
+    * @param mouseX Mouse position on x axis.
+    * @param mouseY Mouse position on y axis.
+    * 
+    * @return True if initial state is clicked, false otherwise.
+    */
     const bool isInitialStageClicked(int mouseX, int mouseY) const {
       return text_.getGlobalBounds().contains(mouseX, mouseY);
     }
 
+    /**
+    * @brief Adds a new gate to gateSlots_ that are drawn on screen.
+    *
+    * @param abbreviation Text that will be visible in the gate.
+    */
     void addGate(std::string abbreviation) {
       VisualGate gate(placeholder_.getPosition(), abbreviation);
       gateSlots_.push_back(gate);

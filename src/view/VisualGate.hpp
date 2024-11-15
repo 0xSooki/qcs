@@ -44,15 +44,10 @@ class VisualGate : public VisualGateAbstract {
       text_.setPosition(gate_.getPosition() + (gate_.getSize() / 2.f));
     }
 
-    VisualGate() {}
-
     /**
-    * @brief Destructor for the VisualGate class.
+    * @brief Default destructor for the VisualGate class.
     */
     virtual ~VisualGate() = default;
-
-    VisualGate(const VisualGate&) = default;
-    VisualGate& operator=(const VisualGate&) = default;
 
     /**
     * @brief Draws the gate to the window.
@@ -64,19 +59,29 @@ class VisualGate : public VisualGateAbstract {
       window.draw(text_);
     }
 
+    /**
+    * @brief Moves the gate to a specified position.
+    *
+    * @param newPosition Vector of the position the gate will be moved.
+    */
     void moveTo(sf::Vector2f newPosition) override {
       gate_.setPosition(newPosition);
       text_.setPosition(newPosition + (gate_.getSize() / 2.f));
     }
 
+    /**
+    * @brief Getter for 'selected_' variable.
+    *
+    * @return True or false, depending on the value of 'selected_'.
+    */
     const bool getSelected() const {
       return selected_;
     }
 
     /**
-    * @brief Setter for 'selected' variable
+    * @brief Setter for 'selected_' variable.
     *
-    * @param selected the value to be set
+    * @param selected The value to be set.
     */
     void setSelected(bool selected) {
       if (selected) 
