@@ -8,7 +8,7 @@ In each meeting, you are required to discuss:
 4. Deviations and changes to the project plan, if any
 
 
-# Meeting dd.mm.2021 HH::MM
+# Meeting dd.mm.2024 HH:MM
 
 **Participants**: 
 1. Member 1
@@ -50,6 +50,49 @@ Short summary of current project status.
 ### TODOs
 1. Member 1: Write an action.
 2. ...
+
+# Meeting 15.11.2024 17:00
+
+**Participants**: 
+1. Henna
+2. Emma
+3. Hà
+4. Bence
+
+## Summary of works
+1. Henna
+   
+   Worked on the GUI. Adding gates to one qubit is implemented and waiting for review.
+
+2. Emma
+
+   Worked on ready-made circuits and related operations. The work depends on quantum circuit so that need to be finalised before it is fully ready. will continue working with it.
+
+3. Hà
+   
+   Worked on Quantum Circuit and its tests.
+
+4. Bence
+
+   Implemented more operations to the existing gates and implemented the rest of the basic gates (H and CNOT). 
+
+## Challenges
+
+Just some waiting because of the dependencies, but nothing major.
+
+## Actions
+1. Henna will add the missing UI elements such as buttons for saving and loading circuit to file and evaluating the circuit.
+2. Emma will continue working with the ready-made circuits and check if there are open issues that can be taken.
+3. Hà will include H and CNOT gates that Bence worked on and pushed to the dev to the circuit and write tests to them.
+4. Bence simulation to simulate the quantum circuit
+
+## Project status 
+
+Third sprint starts today. We are slightly behind our planned schedule, but the goal now is to finish the basic features as soon as possible, and then continue the work with additional and advanced features.
+
+### TODOs
+
+TODOs are listed above, in Actions.
 
 # Meeting 08.11.2024 18:00
 
