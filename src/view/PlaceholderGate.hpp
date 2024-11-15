@@ -36,19 +36,19 @@ class PlaceholderGate : public VisualGateAbstract {
     /**
     * @brief Destructor for the PlaceholderGate class.
     */
-    ~PlaceholderGate() = default;
+    virtual ~PlaceholderGate() = default;
 
     /**
     * @brief Draws the gate to the window.
     *
     * @param window Window where the gate will be drawn.
     */
-    virtual const void draw(sf::RenderWindow& window) const {
+    const void draw(sf::RenderWindow& window) const override {
       if (visible_)
         window.draw(gate_);
     }
 
-    void moveTo(sf::Vector2f newPosition) {
+    void moveTo(sf::Vector2f newPosition) override {
       gate_.setPosition(newPosition);
     }
 

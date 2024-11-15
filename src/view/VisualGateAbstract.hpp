@@ -26,7 +26,7 @@ class VisualGateAbstract {
     /**
     * @brief Destructor for the VisualGate class.
     */
-    ~VisualGateAbstract() = default;
+    virtual ~VisualGateAbstract() = default;
 
     /**
     * @brief Draws the gate to the window.
@@ -51,6 +51,12 @@ class VisualGateAbstract {
         return true;
       else
         return false;
+    }
+
+    virtual void moveTo(sf::Vector2f newPosition) = 0;
+
+    const sf::Vector2f getPosition() const {
+      return gate_.getPosition();
     }
 };
 

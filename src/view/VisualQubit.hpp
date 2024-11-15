@@ -3,10 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <list>
 
 #include "PlaceholderGate.hpp"
-#include "VisualGateAbstract.hpp"
+#include "VisualGate.hpp"
 
 /**
  * @class VisualQubit
@@ -18,7 +17,7 @@ class VisualQubit {
     sf::Font font_;
     sf::Text text_;
     std::string initialState_ = "|0>";
-    std::vector<VisualGateAbstract*> gateSlots_;
+    std::vector<VisualGate> gateSlots_;
     PlaceholderGate placeholder_;
 
   public:
@@ -39,31 +38,51 @@ class VisualQubit {
       text_.setPosition(qubit_.getPosition() - sf::Vector2f(20, -2));
 
       placeholder_.moveTo(pos + sf::Vector2f(20, -40));
-
-      gateSlots_.push_back(&placeholder_);
     }
 
     /**
-    * @brief Destructor for the VisualGate class.
+    * @brief Destructor for the VisualQubit class.
     */
     ~VisualQubit() = default;
 
     /**
-    * @brief Draws the qubit_ to the window.
+    * @brief Draws the qubit and it's gates to the window.
     *
-    * @param window Window where the qubit_ will be drawn.
+    * @param window Window where the qubit and gates will be drawn.
     */
     const void draw(sf::RenderWindow& window) const {
       window.draw(qubit_);
       window.draw(text_);
-      for (auto gate : gateSlots_) {
-        gate->draw(window);
+      for (VisualGate gate : gateSlots_) {
+        gate.draw(window);
       }
+      if (gateSlots_.size() < 7)
+        placeholder_.draw(window);
     }
 
-    void addGate() {
-      
+    const bool isPlaceholderClicked(int mouseX, int mouseY) const {
+      return gateSlots_.size() < 7
+        ? placeholder_.isPressed(mouseX, mouseY)
+        : false;
+    }
+
+    void switchInitialState() {
+      initialState_ == "|0>"
+        ? initialState_ = "|1>"
+        : initialState_ = "|0>";
+
+      text_.setString(initialState_);
+    }
+
+    const bool isInitialStageClicked(int mouseX, int mouseY) const {
+      return text_.getGlobalBounds().contains(mouseX, mouseY);
+    }
+
+    void addGate(std::string abbreviation) {
+      VisualGate gate(placeholder_.getPosition(), abbreviation);
+      gateSlots_.push_back(gate);
+      placeholder_.moveTo(gate.getPosition() + sf::Vector2f(110, 0));
     }
 };
 
-#endif // VISUAL_GATE_HPP
+#endif // VISUAL_QUBIT_HPP

@@ -83,6 +83,28 @@ int main() {
 
                         gateSelected = cnot.getSelected();
                     }
+                    if (qubit.isPlaceholderClicked(event.mouseButton.x, event.mouseButton.y) && gateSelected) {
+                        if (pauliX.getSelected())
+                            qubit.addGate("X");
+                        else if (pauliY.getSelected())
+                            qubit.addGate("Y");
+                        else if (pauliZ.getSelected())
+                            qubit.addGate("Z");
+                        else if (hadamard.getSelected())
+                            qubit.addGate("H");
+                        else if (cnot.getSelected())
+                            qubit.addGate("CNOT");
+
+                        pauliX.setSelected(false);
+                        pauliY.setSelected(false);
+                        pauliZ.setSelected(false);
+                        hadamard.setSelected(false);
+                        cnot.setSelected(false);
+                        gateSelected = false;
+                    }
+                    if (qubit.isInitialStageClicked(event.mouseButton.x, event.mouseButton.y)) {
+                        qubit.switchInitialState();
+                    }
 
                     PlaceholderGate::setVisible(gateSelected);
                 }
@@ -102,6 +124,7 @@ int main() {
         // draw line after gates
         window.draw(line);
 
+        // draw the qubit(s)
         qubit.draw(window);
 
         // end the current frame
