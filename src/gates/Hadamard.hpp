@@ -15,6 +15,8 @@ public:
     (*this)(1, 1) = -1;
     (*this) *= 1 / std::sqrt(2);
   }
+
+  std::string to_string() const { return "H"; }
 };
 
 #endif
