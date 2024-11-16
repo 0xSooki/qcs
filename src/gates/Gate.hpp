@@ -2,6 +2,7 @@
 #define GATE_HPP
 
 #include <Eigen/Dense>
+#include <unsupported/Eigen/KroneckerProduct>
 #include <vector>
 
 /**
@@ -34,6 +35,10 @@ public:
     this->setZero();
     this->qubits = qubits;
     this->controls = controls;
+
+    // Projection operators
+    P0x0 << 1, 0, 0, 0;
+    P1x1 << 0, 0, 0, 1;
   }
 
   /**
@@ -50,10 +55,53 @@ public:
    */
   int num_qubits() const { return qubits.size(); }
 
+  // TODO: Implement multi control gate support
+  /**
+   * @brief Generates the unitary matrix for the gate.
+   *
+   * @param n The total number of qubits in the system.
+   * @return The resulting operator matrix as an Eigen::MatrixXcd.
+   */
+  Eigen::MatrixXcd get_matrix(int n) {
+    Eigen::MatrixXcd op = Eigen::MatrixXcd::Identity(1, 1);
+    Eigen::MatrixXcd op2 = Eigen::MatrixXcd::Identity(1, 1);
+
+    if (qubits.size() > 1) {
+      for (int i = 0; i < n; ++i) {
+        if (i == qubits[0]) {
+          op = Eigen::kroneckerProduct(op, P0x0).eval();
+          op2 = Eigen::kroneckerProduct(op2, P1x1).eval();
+        } else if (i == qubits[1]) {
+          op = Eigen::kroneckerProduct(op, I).eval();
+          op2 = Eigen::kroneckerProduct(op2, *this).eval();
+        } else {
+          op = Eigen::kroneckerProduct(op, I).eval();
+          op2 = Eigen::kroneckerProduct(op2, I).eval();
+        }
+      }
+      op += op2;
+    } else {
+      for (int i = 0; i < n; ++i) {
+        if (i == qubits[0]) {
+          op = Eigen::kroneckerProduct(op, *this).eval();
+        } else {
+          op = Eigen::kroneckerProduct(op, I).eval();
+        }
+      }
+    }
+
+    return op;
+  }
+
 private:
   // Disallow copy and assignment
   Gate(const Gate &) = delete;
   Gate &operator=(const Gate &) = delete;
+
+  // Projection operators
+  Eigen::MatrixXcd P0x0 = Eigen::MatrixXcd(2, 2);
+  Eigen::MatrixXcd P1x1 = Eigen::MatrixXcd(2, 2);
+  Eigen::MatrixXcd I = Eigen::MatrixXcd::Identity(2, 2);
 
 protected:
   std::vector<int> qubits;
