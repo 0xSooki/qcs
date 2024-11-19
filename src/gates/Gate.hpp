@@ -46,7 +46,6 @@ public:
    *
    * @return The string representation of the gate.
    */
-  virtual std::string to_string() const = 0;
 
   /**
    * @brief Returns the number of qubits the gate acts on.
@@ -65,7 +64,6 @@ public:
   Eigen::MatrixXcd get_matrix(int n) {
     Eigen::MatrixXcd op = Eigen::MatrixXcd::Identity(1, 1);
     Eigen::MatrixXcd op2 = Eigen::MatrixXcd::Identity(1, 1);
-
     if (qubits.size() > 1) {
       for (int i = 0; i < n; ++i) {
         if (i == qubits[0]) {
@@ -85,7 +83,7 @@ public:
         if (i == qubits[0]) {
           op = Eigen::kroneckerProduct(op, *this).eval();
         } else {
-          op = Eigen::kroneckerProduct(op, I).eval();
+          op = Eigen::kroneckerProduct(I, op).eval();
         }
       }
     }
@@ -94,10 +92,6 @@ public:
   }
 
 private:
-  // Disallow copy and assignment
-  Gate(const Gate &) = delete;
-  Gate &operator=(const Gate &) = delete;
-
   // Projection operators
   Eigen::MatrixXcd P0x0 = Eigen::MatrixXcd(2, 2);
   Eigen::MatrixXcd P1x1 = Eigen::MatrixXcd(2, 2);
