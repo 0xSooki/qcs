@@ -7,7 +7,7 @@
 
 class H : public Gate {
 public:
-  H(std::vector<int> qubits, std::vector<int> controls)
+  H(std::vector<int> qubits, std::vector<int> controls = {})
       : Gate(2, qubits, controls) {
     (*this)(0, 0) = 1;
     (*this)(0, 1) = 1;
