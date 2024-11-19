@@ -4,25 +4,19 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "VisualGateAbstract.hpp"
+
 /**
  * @class VisualGate
  * @brief A class visualizing a quantum gate in GUI.
- *
- * The Gate class extends Eigen's `MatrixXcd` class to represent complex-valued
- * square matrices.
- * This class initializes a matrix with a specified dimension and sets all
- * elements to zero by default.
  */
-class VisualGate {
+class VisualGate : public VisualGateAbstract {
   private:
-    sf::RectangleShape gate;
-    sf::Text text;
-    sf::Font font;
-    int size = 90;
+    sf::Text text_;
+    sf::Font font_;
+    bool selected_ = false;
     
   public:
-    bool selected = false;
-
     /**
     * @brief Constructs a VisualGate with a specified position and abbreviation of the gate.
     *
@@ -31,70 +25,71 @@ class VisualGate {
     * @param pos Position where the gate should be drawn in GUI.
     * @param abbreviation Text that will be visible inside the gate square.
     */
-    VisualGate(sf::Vector2f pos, std::string abbreviation) {
-      gate.setSize(sf::Vector2f(size, size));
-      gate.setFillColor(sf::Color::White);
-      gate.setPosition(pos);
-      gate.setOutlineThickness(5.f);
-      gate.setOutlineColor(sf::Color::Black);
+    VisualGate(const sf::Vector2f& pos, const std::string& abbreviation) {
+      gate_.setSize(sf::Vector2f(size_, size_));
+      gate_.setFillColor(sf::Color::White);
+      gate_.setPosition(pos);
+      gate_.setOutlineThickness(5.f);
+      gate_.setOutlineColor(sf::Color::Black);
 
-      if (!font.loadFromFile("./src/resources/fonts/Roboto-Bold.ttf")) {
+      if (!font_.loadFromFile("./src/resources/fonts/Roboto-Bold.ttf")) {
           std::cout << "Failed to load the font" << std::endl;
       }
 
-      text.setFont(font);
-      text.setString(abbreviation);
-      text.setCharacterSize(32);
-      text.setFillColor(sf::Color::Black);
-      text.setOrigin(text.getGlobalBounds().width / 2.f + text.getLocalBounds().left, text.getGlobalBounds().height / 2.f + text.getLocalBounds().top);
-      text.setPosition(gate.getPosition() + (gate.getSize() / 2.f));
+      text_.setFont(font_);
+      text_.setString(abbreviation);
+      text_.setCharacterSize(32);
+      text_.setFillColor(sf::Color::Black);
+      text_.setOrigin(text_.getGlobalBounds().width / 2.f + text_.getLocalBounds().left, text_.getGlobalBounds().height / 2.f + text_.getLocalBounds().top);
+      text_.setPosition(gate_.getPosition() + (gate_.getSize() / 2.f));
     }
 
     /**
-    * @brief Destructor for the VisualGate class.
+    * @brief Default destructor for the VisualGate class.
     */
-    ~VisualGate() = default;
+    virtual ~VisualGate() = default;
 
     /**
     * @brief Draws the gate to the window.
     *
     * @param window Window where the gate will be drawn.
     */
-    void draw(sf::RenderWindow& window) {
-      window.draw(gate);
-      window.draw(text);
+    const void draw(sf::RenderWindow& window) const override {
+      window.draw(gate_);
+      window.draw(text_);
     }
 
     /**
-    * @brief Checks if the mouse click happened inside the gate
+    * @brief Moves the gate to a specified position.
     *
-    * @param mouseX Position where the gate should be drawn in GUI.
-    * @param mouseY Text that will be visible inside the gate square.
-    * 
-    * @return true if the click was inside the gate, otherwise false
+    * @param newPosition Vector of the position the gate will be moved.
     */
-    bool isPressed(int mouseX, int mouseY) {
-      int gateX = gate.getPosition().x;
-      int gateY = gate.getPosition().y;
-
-      if ((gateX <= mouseX && mouseX <= (gateX + size)) && (gateY <= mouseY && mouseY <= (gateY + size)))
-        return true;
-      else
-        return false;
+    void moveTo(sf::Vector2f newPosition) override {
+      gate_.setPosition(newPosition);
+      text_.setPosition(newPosition + (gate_.getSize() / 2.f));
     }
 
     /**
-    * @brief Setter for 'selected' variable
+    * @brief Getter for 'selected_' variable.
     *
-    * @param select the value to be set
+    * @return True or false, depending on the value of 'selected_'.
     */
-    void setSelected(bool select) {
-      if (select) 
-        gate.setFillColor(sf::Color::Red);
+    const bool getSelected() const {
+      return selected_;
+    }
+
+    /**
+    * @brief Setter for 'selected_' variable.
+    *
+    * @param selected The value to be set.
+    */
+    void setSelected(bool selected) {
+      if (selected) 
+        gate_.setFillColor(sf::Color::Red);
       else
-        gate.setFillColor(sf::Color::White);
+        gate_.setFillColor(sf::Color::White);
       
-      selected = select;
+      selected_ = selected;
     }
 };
 
