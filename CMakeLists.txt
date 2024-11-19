@@ -26,6 +26,9 @@ set(SRC_FILES
 # For IDEs
 set(HEADER_FILES
     src/view/VisualGate.hpp
+    src/view/VisualQubit.hpp
+    src/view/PlaceholderGate.hpp
+    src/view/VisualGateAbstract.hpp
 )
 
 add_executable(QuantumCircuitSimulator ${SRC_FILES} ${HEADER_FILES})
