@@ -66,10 +66,10 @@ public:
     Eigen::MatrixXcd op2 = Eigen::MatrixXcd::Identity(1, 1);
     if (qubits.size() > 1) {
       for (int i = 0; i < n; ++i) {
-        if (i == qubits[0]) {
+        if (i == qubits[1]) {
           op = Eigen::kroneckerProduct(op, P0x0).eval();
           op2 = Eigen::kroneckerProduct(op2, P1x1).eval();
-        } else if (i == qubits[1]) {
+        } else if (i == qubits[0]) {
           op = Eigen::kroneckerProduct(op, I).eval();
           op2 = Eigen::kroneckerProduct(op2, *this).eval();
         } else {
