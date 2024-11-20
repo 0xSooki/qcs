@@ -1,5 +1,5 @@
 #include "../src/gates/CNOT.hpp"
-#include "Eigen/src/Core/Matrix.h"
+#include "Eigen/Dense"
 #include <gtest/gtest.h>
 
 TEST(CNOT, get_matrix) {

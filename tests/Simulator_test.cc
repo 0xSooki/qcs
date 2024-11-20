@@ -3,7 +3,6 @@
 #include "../src/gates/CNOT.hpp"
 #include "../src/gates/Hadamard.hpp"
 #include "../src/gates/PauliGates.hpp"
-#include "Eigen/Dense"
 #include <gtest/gtest.h>
 
 TEST(QuantumCircuitTest, AddPauliXGate) {
