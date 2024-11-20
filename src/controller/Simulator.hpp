@@ -2,9 +2,9 @@
 #define SIMULATOR_HPP
 
 #include "Eigen/Dense"
-#include "Eigen/src/Core/Matrix.h"
 #include "QuantumCircuit.hpp"
 #include "unsupported/Eigen/KroneckerProduct"
+#include <iostream>
 
 /**
  * @class Simulator
@@ -19,9 +19,8 @@ class Simulator {
 
 public:
   /**
-   * @brief Constructs a Simulator object with a quantum circuit.
+   * @brief Constructs a Simulator object.
    *
-   * @param circ The quantum circuit to be simulated.
    */
   Simulator() {}
 
@@ -50,6 +49,8 @@ public:
     // Evaluate gates
     for (const auto &gate : circ.getGates()) {
       state = gate->get_matrix(circ.getNumQubits()) * state;
+      std::cout << gate->get_matrix(circ.getNumQubits()) << std::endl
+                << std::endl;
     }
     return state;
   }
