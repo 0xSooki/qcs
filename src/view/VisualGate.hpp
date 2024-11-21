@@ -13,7 +13,6 @@
 class VisualGate : public VisualGateAbstract {
   private:
     sf::Text text_;
-    sf::Font font_;
     bool selected_ = false;
     
   public:
@@ -25,18 +24,14 @@ class VisualGate : public VisualGateAbstract {
     * @param pos Position where the gate should be drawn in GUI.
     * @param abbreviation Text that will be visible inside the gate square.
     */
-    VisualGate(const sf::Vector2f& pos, const std::string& abbreviation) {
+    VisualGate(const sf::Vector2f& pos, const std::string& abbreviation, const sf::Font& font) {
       gate_.setSize(sf::Vector2f(size_, size_));
       gate_.setFillColor(sf::Color::White);
       gate_.setPosition(pos);
       gate_.setOutlineThickness(5.f);
       gate_.setOutlineColor(sf::Color::Black);
 
-      if (!font_.loadFromFile("./src/resources/fonts/Roboto-Bold.ttf")) {
-          std::cout << "Failed to load the font" << std::endl;
-      }
-
-      text_.setFont(font_);
+      text_.setFont(font);
       text_.setString(abbreviation);
       text_.setCharacterSize(32);
       text_.setFillColor(sf::Color::Black);

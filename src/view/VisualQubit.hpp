@@ -14,7 +14,6 @@
 class VisualQubit {
   private:
     sf::RectangleShape qubit_;
-    sf::Font font_;
     sf::Text text_;
     std::string initialState_ = "|0>";
     std::vector<VisualGate> gateSlots_;
@@ -28,16 +27,12 @@ class VisualQubit {
     *
     * @param pos Position where the qubit should be drawn in GUI.
     */
-    VisualQubit(const sf::Vector2f& pos) {
+    VisualQubit(const sf::Vector2f& pos, const sf::Font& font) {
       qubit_.setSize(sf::Vector2f(800, 5));
       qubit_.setFillColor(sf::Color::Black);
       qubit_.setPosition(pos);
 
-      if (!font_.loadFromFile("./src/resources/fonts/Roboto-Bold.ttf")) {
-          std::cout << "Failed to load the font_" << std::endl;
-      }
-
-      text_.setFont(font_);
+      text_.setFont(font);
       text_.setString(initialState_);
       text_.setCharacterSize(32);
       text_.setFillColor(sf::Color::Black);
@@ -109,8 +104,8 @@ class VisualQubit {
     *
     * @param abbreviation Text that will be visible in the gate.
     */
-    void addGate(std::string abbreviation) {
-      VisualGate gate(placeholder_.getPosition(), abbreviation);
+    void addGate(const std::string& abbreviation, const sf::Font& font) {
+      VisualGate gate(placeholder_.getPosition(), abbreviation, font);
       gateSlots_.push_back(gate);
       placeholder_.moveTo(gate.getPosition() + sf::Vector2f(110, 0));
     }
