@@ -21,6 +21,7 @@ FetchContent_MakeAvailable(SFML)
 
 set(SRC_FILES
     src/main.cpp
+    libs/tinyfiledialogs/tinyfiledialogs.cpp
 )
 
 # For IDEs
@@ -29,6 +30,8 @@ set(HEADER_FILES
     src/view/VisualQubit.hpp
     src/view/PlaceholderGate.hpp
     src/view/VisualGateAbstract.hpp
+    src/view/Button.hpp
+    libs/tinyfiledialogs/tinyfiledialogs.hpp
 )
 
 add_executable(QuantumCircuitSimulator ${SRC_FILES} ${HEADER_FILES})
