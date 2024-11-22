@@ -60,7 +60,7 @@ enable_testing()
 
 add_executable(
   tests
-  tests/PauliGates_test.cc
+  tests/Simulator_test.cc
 )
 target_link_libraries(
 tests

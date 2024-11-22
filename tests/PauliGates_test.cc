@@ -9,7 +9,7 @@ TEST(PauliX, PauliXBasicAssertions) {
   mtx << 0, 1, 1, 0;
   EXPECT_EQ(x.num_qubits(), 1);
   EXPECT_EQ(x.to_string(), "X");
-  EXPECT_EQ(x, mtx);
+  EXPECT_EQ(x.get_matrix(1), mtx);
 }
 
 TEST(PauliY, PauliYBasicAssertions) {
@@ -18,7 +18,7 @@ TEST(PauliY, PauliYBasicAssertions) {
   mtx << 0, -std::complex<double>(0, 1), std::complex<double>(0, 1), 0;
   EXPECT_EQ(y.num_qubits(), 1);
   EXPECT_EQ(y.to_string(), "Y");
-  EXPECT_EQ(y, mtx);
+  EXPECT_EQ(y.get_matrix(1), mtx);
 }
 
 TEST(PauliZ, PauliZBasicAssertions) {
@@ -27,5 +27,5 @@ TEST(PauliZ, PauliZBasicAssertions) {
   mtx << 1, 0, 0, -1;
   EXPECT_EQ(z.num_qubits(), 1);
   EXPECT_EQ(z.to_string(), "Z");
-  EXPECT_EQ(z, mtx);
+  EXPECT_EQ(z.get_matrix(1), mtx);
 }
