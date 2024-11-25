@@ -72,35 +72,34 @@ public:
       placeholder_.draw(window);
   }
 
-  /**
-   * @brief Determines if the mouse click happened inside the placeholder gate.
-   *
-   * @param mouseX Mouse position on x axis.
-   * @param mouseY Mouse position on y axis.
-   *
-   * @return True if the placeholder gate is clicked, false otherwise.
-   */
-  const bool isPlaceholderClicked(int mouseX, int mouseY) const
-  {
-    return gates_.size() < 7
-               ? placeholder_.isPressed(mouseX, mouseY)
-               : false;
-  }
+    /**
+    * @brief Determines if the mouse click happened inside the placeholder gate.
+    *
+    * @param mouseX Mouse position on x axis.
+    * @param mouseY Mouse position on y axis.
+    * 
+    * @return True if the placeholder gate is clicked, false otherwise.
+    */
+    const bool isPlaceholderClicked(int mouseX, int mouseY) const {
+      return gates_.size() < 7
+        ? placeholder_.isPressed(mouseX, mouseY)
+        : false;
+    }
 
-  /**
-   * @brief Switches the initial state of the qubit to be either 0 or 1.
-   */
-  void switchInitialState()
-  {
-    initialState_ == 0
-        ? initialState_ = 1
-        : initialState_ = 0;
-
-    std::stringstream ss;
-    ss << "|" << initialState_ << ">";
-
-    text_.setString(ss.str());
-  }
+    /**
+    * @brief Switches the initial state of the qubit to be either 0 or 1.
+    */
+    void switchInitialState()
+    {
+      initialState_ == 0
+          ? initialState_ = 1
+          : initialState_ = 0;
+  
+      std::stringstream ss;
+      ss << "|" << initialState_ << ">";
+  
+      text_.setString(ss.str());
+    }
 
   /**
    * @brief Determines if the mouse click happened inside the initial state text.

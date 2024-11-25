@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <filesystem>
 
+#include "view/VisualCNOT.hpp"
 #include "../libs/tinyfiledialogs/tinyfiledialogs.hpp"
 
 #include "view/Button.hpp"
@@ -39,6 +40,8 @@ int main() {
     VisualGate pauliZ(sf::Vector2f(20, 260), "Z", font);
     VisualGate hadamard(sf::Vector2f(20, 380), "H", font);
     VisualGate cnot(sf::Vector2f(20, 500), "CNOT", font);
+
+    VisualCNOT vis(sf::Vector2f(260, 140), sf::Vector2f(260, 250));
 
     sf::RectangleShape line(sf::Vector2f(windowHeight, 5));
     line.setFillColor(sf::Color::Black);
@@ -102,7 +105,7 @@ int main() {
 
                         gateSelected = hadamard.getSelected();
                     }
-                    if (cnot.isPressed(event.mouseButton.x, event.mouseButton.y)) {
+                    if (cnot.isPressed(event.mouseButton.x, event.mouseButton.y) && qubits.size() > 1) {
                         pauliX.setSelected(false);
                         pauliY.setSelected(false);
                         pauliZ.setSelected(false);
@@ -154,7 +157,7 @@ int main() {
                         std::cout << "Export button is pressed" << std::endl;
                         // Here the function for saving the file
                     }
-                    if (addQubit.isPressed(event.mouseButton.x, event.mouseButton.y)) {
+                    if (addQubit.isPressed(event.mouseButton.x, event.mouseButton.y) && qubits.size() < 5) {
                         qubits.push_back(VisualQubit(addQubit.getPosition(), font));
                         addQubit.moveTo(addQubit.getPosition() + sf::Vector2f(0, 110));
                         removeQubit.moveTo(removeQubit.getPosition() + sf::Vector2f(0, 110));
@@ -195,6 +198,8 @@ int main() {
         pauliZ.draw(window);
         hadamard.draw(window);
         cnot.draw(window);
+
+        vis.draw(window);
 
         // draw line after gates
         window.draw(line);
