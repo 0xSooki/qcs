@@ -51,6 +51,48 @@ Short summary of current project status.
 1. Member 1: Write an action.
 2. ...
 
+# Meeting 22.11.2024 17:00
+
+**Participants**: 
+1. Henna
+2. Emma
+3. Hà
+4. Bence
+
+## Summary of works
+1. Henna
+   
+   Import and export buttons to GUI, support for multible qubits.
+
+2. Emma
+
+   No visible progress now since teleportation is dependent on measurement, will compine those two + statevector.
+
+3. Hà
+   
+   Read/write circuit, problems with some of the gates (to_string method in tests). Missing to_string methods were added to dev, need to merge branches.
+
+4. Bence
+
+   Fixing bugs and creating simulator framework. Taking a look at more advanced stuff.
+
+## Challenges
+
+Eigen submodule was not working correctly, we were able to solve it with `git submodule update --init --recursive`. Some bottleneck with reviewing code, which is understandable since we don't work full-time.
+
+## Actions
+1. Henna will continue looking into multible qubit support and finish the GUI.
+2. Emma will implement statevector and teleportation.
+3. Hà will continue testing the read/write functionality.
+4. Bence will start looking into additional / advanced features.
+
+## Project status 
+Still a little late with our schedule, especially GUI, hopefully we will be able to catch up.
+
+### TODOs
+
+TODOs are listed above
+
 # Meeting 15.11.2024 17:00
 
 **Participants**: 
