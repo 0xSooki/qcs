@@ -7,6 +7,8 @@
 #include "PlaceholderGate.hpp"
 #include "VisualGate.hpp"
 
+#include "../gates/Gate.hpp"
+
 /**
  * @class VisualQubit
  * @brief A class visualizing a qubit in GUI.
@@ -16,7 +18,7 @@ class VisualQubit {
     sf::RectangleShape qubit_;
     sf::Text text_;
     std::string initialState_ = "|0>";
-    std::vector<VisualGate> gateSlots_;
+    std::vector<std::pair<Gate, VisualGate>> gates_;
     PlaceholderGate placeholder_;
 
   public:
@@ -26,6 +28,7 @@ class VisualQubit {
     * Initializes a line to specified position with initial state of the qubit before the line.
     *
     * @param pos Position where the qubit should be drawn in GUI.
+    * @param font The font that will be used for the texts.
     */
     VisualQubit(const sf::Vector2f& pos, const sf::Font& font) {
       qubit_.setSize(sf::Vector2f(800, 5));
@@ -55,10 +58,10 @@ class VisualQubit {
     const void draw(sf::RenderWindow& window) const {
       window.draw(qubit_);
       window.draw(text_);
-      for (VisualGate gate : gateSlots_) {
-        gate.draw(window);
+      for (auto gate : gates_) {
+        gate.second.draw(window);
       }
-      if (gateSlots_.size() < 7)
+      if (gates_.size() < 7)
         placeholder_.draw(window);
     }
 
@@ -71,7 +74,7 @@ class VisualQubit {
     * @return True if the placeholder gate is clicked, false otherwise.
     */
     const bool isPlaceholderClicked(int mouseX, int mouseY) const {
-      return gateSlots_.size() < 7
+      return gates_.size() < 7
         ? placeholder_.isPressed(mouseX, mouseY)
         : false;
     }
@@ -100,14 +103,20 @@ class VisualQubit {
     }
 
     /**
-    * @brief Adds a new gate to gateSlots_ that are drawn on screen.
+    * @brief Adds a new visual-logical gate pair to gates_.
     *
     * @param abbreviation Text that will be visible in the gate.
+    * @param font The font that will be used inside the gate
+    * @param gate The logical gate that will be paired with the visual one
     */
-    void addGate(const std::string& abbreviation, const sf::Font& font) {
-      VisualGate gate(placeholder_.getPosition(), abbreviation, font);
-      gateSlots_.push_back(gate);
-      placeholder_.moveTo(gate.getPosition() + sf::Vector2f(110, 0));
+    void addGate(const std::string& abbreviation, const sf::Font& font, Gate gate) {
+      std::pair<Gate, VisualGate> newGate(gate, VisualGate(placeholder_.getPosition(), abbreviation, font));
+      gates_.push_back(newGate);
+      placeholder_.moveTo(newGate.second.getPosition() + sf::Vector2f(110, 0));
+    }
+
+     std::vector<std::pair<Gate, VisualGate>> getGates() {
+      return gates_;
     }
 };
 
