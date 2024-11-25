@@ -15,13 +15,13 @@
 #include "gates/PauliGates.hpp"
 #include "gates/Hadamard.hpp"
 
-int main() {
-  // create the window
-    int windowHeight = 800;
-    int windowWidth = 1400;
-    bool gateSelected = false;
-    sf::Font font;
+int windowHeight = 800;
+int windowWidth = 1400;
+bool gateSelected = false;
+sf::Font font;
+std::vector<VisualQubit> qubits;
 
+int main() {
     std::filesystem::path fontPath = "../../resources/Roboto-Bold.ttf";
 
     if (!font.loadFromFile(fontPath)) {
@@ -45,7 +45,9 @@ int main() {
     line.setPosition(sf::Vector2f(140, 0));
     line.rotate(90.f);
 
-    VisualQubit qubit(sf::Vector2f(260, 140), font);
+    qubits.push_back(VisualQubit(sf::Vector2f(260, 140), font));
+    Button addQubit(sf::Vector2f(260, 250), "Add Qubit", font);
+    Button removeQubit(sf::Vector2f(400, 250), "Remove Qubit", font, false);
 
     Button importButton(sf::Vector2f(windowWidth - 20, 20) - sf::Vector2f(190, 0), "Import from file", font);
     Button exportButton(sf::Vector2f(windowWidth - 20, 20) - sf::Vector2f(360, 0), "Export to file", font);
@@ -121,15 +123,16 @@ int main() {
                         //else if (cnot.getSelected())
                             //qubit.addGate("CNOT", font, );
 
-                        pauliX.setSelected(false);
-                        pauliY.setSelected(false);
-                        pauliZ.setSelected(false);
-                        hadamard.setSelected(false);
-                        cnot.setSelected(false);
-                        gateSelected = false;
-                    }
-                    if (qubit.isInitialStageClicked(event.mouseButton.x, event.mouseButton.y)) {
-                        qubit.switchInitialState();
+                            pauliX.setSelected(false);
+                            pauliY.setSelected(false);
+                            pauliZ.setSelected(false);
+                            hadamard.setSelected(false);
+                            cnot.setSelected(false);
+                            gateSelected = false;
+                        }
+                        if (i->isInitialStageClicked(event.mouseButton.x, event.mouseButton.y)) {
+                            i->switchInitialState();
+                        }
                     }
                     if (importButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
                         std::cout << "Import button is pressed" << std::endl;
@@ -150,6 +153,20 @@ int main() {
                     if (exportButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
                         std::cout << "Export button is pressed" << std::endl;
                         // Here the function for saving the file
+                    }
+                    if (addQubit.isPressed(event.mouseButton.x, event.mouseButton.y)) {
+                        qubits.push_back(VisualQubit(addQubit.getPosition(), font));
+                        addQubit.moveTo(addQubit.getPosition() + sf::Vector2f(0, 110));
+                        removeQubit.moveTo(removeQubit.getPosition() + sf::Vector2f(0, 110));
+                        removeQubit.setVisible(true);
+                    }
+                    if (removeQubit.isPressed(event.mouseButton.x, event.mouseButton.y) && removeQubit.isVisible()) {
+                        qubits.pop_back();
+                        addQubit.moveTo(addQubit.getPosition() - sf::Vector2f(0, 110));
+                        removeQubit.moveTo(removeQubit.getPosition() - sf::Vector2f(0, 110));
+                        if (qubits.size() <= 1) {
+                            removeQubit.setVisible(false);
+                        }
                     }
                     if (evaluateButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
                         QuantumCircuit circuit({qubit.getInitialState()});
@@ -183,7 +200,9 @@ int main() {
         window.draw(line);
 
         // draw the qubit(s)
-        qubit.draw(window);
+        for (auto qubit : qubits) {
+            qubit.draw(window);
+        }
 
         // draw the buttons
         importButton.draw(window);
@@ -191,6 +210,8 @@ int main() {
         evaluateButton.draw(window);
 
         result.draw(window);
+        addQubit.draw(window);
+        removeQubit.draw(window);
 
         // end the current frame
         window.display();

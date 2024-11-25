@@ -13,7 +13,7 @@ class Button {
     sf::RectangleShape button_;
     sf::Text text_;
     sf::Vector2f size_;
-    bool selected_ = false;
+    bool visible_;
     
   public:
     /**
@@ -24,7 +24,7 @@ class Button {
     * @param pos Position where the button should be drawn in GUI.
     * @param text Text that will be visible inside the button.
     */
-    Button(const sf::Vector2f& pos, const std::string& text, const sf::Font& font) {
+    Button(const sf::Vector2f& pos, const std::string& text, const sf::Font& font, bool visible = true) {
       text_.setFont(font);
       text_.setString(text);
       text_.setCharacterSize(24);
@@ -40,6 +40,8 @@ class Button {
       button_.setOutlineColor(sf::Color::Black);
 
       text_.setPosition(button_.getPosition() + (size_ / 2.f));
+
+      visible_ = visible;
     }
 
     /**
@@ -53,8 +55,10 @@ class Button {
     * @param window Window where the button will be drawn.
     */
     const void draw(sf::RenderWindow& window) const {
-      window.draw(button_);
-      window.draw(text_);
+      if (visible_) {
+        window.draw(button_);
+        window.draw(text_);
+      }
     }
 
     /**
@@ -65,6 +69,15 @@ class Button {
     void moveTo(sf::Vector2f newPosition) {
       button_.setPosition(newPosition);
       text_.setPosition(newPosition + (size_ / 2.f));
+    }
+
+    /**
+    * @brief Getter for the position of the button.
+    *
+    * @return 2D vector of the position.
+    */
+    const sf::Vector2f getPosition() const {
+      return button_.getPosition();
     }
 
     /**
@@ -83,6 +96,24 @@ class Button {
         return true;
       else
         return false;
+    }
+
+    /**
+    * @brief Setter for 'visible_' variable
+    *
+    * @param visible the value to be set
+    */
+    void setVisible(bool visible) {      
+      visible_ = visible;
+    }
+
+    /**
+    * @brief Getter for 'visible_' variable
+    * 
+    * @return True or false, depending on the value of 'visible_'.
+    */
+    const bool isVisible() const {
+      return visible_;
     }
 };
 
