@@ -73,7 +73,7 @@ class PlaceholderGate : public VisualGateAbstract {
     * 
     * @return True or false, depending on the value of 'visible_'.
     */
-    bool isVisible() {
+    const bool isVisible() const {
       return visible_;
     }
 };
