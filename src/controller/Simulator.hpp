@@ -40,7 +40,8 @@ public:
     // Initialize the state to |0>
     Eigen::VectorXcd state(2);
     Eigen::VectorXcd zero(2);
-    zero, state << 1, 0;
+    zero << 1, 0;
+    state << 1, 0;
 
     // Create the initial state vector which is |0>^n
     for (int i = 0; i < qubits.size() - 1; i++)
