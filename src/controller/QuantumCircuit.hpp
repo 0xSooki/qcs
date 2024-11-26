@@ -23,12 +23,13 @@
  */
 class QuantumCircuit {
 public:
-      /**
+    /**
      * @brief Constructs a QuantumCircuit with a specified number of qubits.
      * 
-     * @param numQubits The number of qubits in the circuit.
+     * @param qubits The number of qubits in the circuit with their initial states.
      */
-    QuantumCircuit(int numQubits) : numQubits_(numQubits) {}
+    QuantumCircuit(const std::vector<int>& qubits) : qubits_(qubits) {}
+    
     /**
      * @brief Adds a gate to the quantum circuit.
      * 
@@ -37,6 +38,7 @@ public:
     void addGate(const std::shared_ptr<Gate>& gate) {
         gates_.push_back(gate);
     }
+
     /**
      * @brief Returns the list of gates in the quantum circuit.
      * 
@@ -45,17 +47,18 @@ public:
     const std::vector<std::shared_ptr<Gate>>& getGates() const {
         return gates_;
     }
+
     /**
-     * @brief Returns the number of qubits in the quantum circuit.
+     * @brief Returns the vector of qubits in the quantum circuit.
      * 
-     * @return The number of qubits.
+     * @return The vector of qubits.
      */
-    int getNumQubits() const {
-        return numQubits_;
+    const std::vector<int>& getQubits() const {
+        return qubits_;
     }
 
 private:
-    int numQubits_;
+    std::vector<int> qubits_;
     std::vector<std::shared_ptr<Gate>> gates_;
 };
 

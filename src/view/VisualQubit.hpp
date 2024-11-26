@@ -17,7 +17,7 @@ class VisualQubit {
   private:
     sf::RectangleShape qubit_;
     sf::Text text_;
-    std::string initialState_ = "|0>";
+    int initialState_ = 0;
     std::vector<std::pair<Gate, VisualGate>> gates_;
     PlaceholderGate placeholder_;
 
@@ -35,8 +35,11 @@ class VisualQubit {
       qubit_.setFillColor(sf::Color::Black);
       qubit_.setPosition(pos);
 
+      std::stringstream ss;
+      ss << "|" << initialState_ << ">";
+
       text_.setFont(font);
-      text_.setString(initialState_);
+      text_.setString(ss.str());
       text_.setCharacterSize(32);
       text_.setFillColor(sf::Color::Black);
       text_.setOrigin(text_.getGlobalBounds().width + text_.getLocalBounds().left, text_.getGlobalBounds().height / 2.f + text_.getLocalBounds().top);
@@ -83,11 +86,14 @@ class VisualQubit {
     * @brief Switches the initial state of the qubit to be either 0 or 1.
     */
     void switchInitialState() {
-      initialState_ == "|0>"
-        ? initialState_ = "|1>"
-        : initialState_ = "|0>";
+      initialState_ == 0
+        ? initialState_ = 1
+        : initialState_ = 0;
 
-      text_.setString(initialState_);
+      std::stringstream ss;
+      ss << "|" << initialState_ << ">";
+
+      text_.setString(ss.str());
     }
 
     /**
@@ -115,8 +121,22 @@ class VisualQubit {
       placeholder_.moveTo(newGate.second.getPosition() + sf::Vector2f(110, 0));
     }
 
-     std::vector<std::pair<Gate, VisualGate>> getGates() {
+    /**
+     * @brief Get the Gates vector.
+     * 
+     * @return std::vector<std::pair<Gate, VisualGate>> 
+     */
+    std::vector<std::pair<Gate, VisualGate>> getGates() {
       return gates_;
+    }
+
+    /**
+     * @brief Get the Initial State of the qubit.
+     * 
+     * @return int
+     */
+    int getInitialState() {
+      return initialState_;
     }
 };
 

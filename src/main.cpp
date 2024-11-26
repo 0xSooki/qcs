@@ -152,7 +152,7 @@ int main() {
                         // Here the function for saving the file
                     }
                     if (evaluateButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
-                        QuantumCircuit circuit(1);
+                        QuantumCircuit circuit({qubit.getInitialState()});
                         std::vector<std::pair<Gate, VisualGate>> gates = qubit.getGates();
 
                         for (auto it = gates.begin() ; it != gates.end() ; it++) {
