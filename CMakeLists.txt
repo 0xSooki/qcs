@@ -29,6 +29,7 @@ set(HEADER_FILES
     src/view/VisualGate.hpp
     src/view/VisualQubit.hpp
     src/view/PlaceholderGate.hpp
+    src/view/Result.hpp
     src/view/VisualGateAbstract.hpp
     src/view/Button.hpp
     libs/tinyfiledialogs/tinyfiledialogs.hpp

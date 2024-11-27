@@ -33,7 +33,8 @@ public:
    * @param circ The quantum circuit to be simulated.
    */
   Eigen::VectorXcd run(QuantumCircuit circ) const {
-    Eigen::VectorXcd mult(circ.getNumQubits());
+    std::vector<int> qubits = circ.getQubits();
+    Eigen::VectorXcd mult(qubits.size());
     mult.setOnes();
 
     // Initialize the state to |0>
@@ -43,13 +44,13 @@ public:
     state << 1, 0;
 
     // Create the initial state vector which is |0>^n
-    for (int i = 0; i < circ.getNumQubits() - 1; i++)
+    for (int i = 0; i < qubits.size() - 1; i++)
       state = Eigen::kroneckerProduct(state, zero).eval();
 
     // Evaluate gates
     for (const auto &gate : circ.getGates()) {
-      state = gate->get_matrix(circ.getNumQubits()) * state;
-      std::cout << gate->get_matrix(circ.getNumQubits()) << std::endl
+      state = gate->get_matrix(qubits.size()) * state;
+      std::cout << gate->get_matrix(qubits.size()) << std::endl
                 << std::endl;
     }
     return state;
