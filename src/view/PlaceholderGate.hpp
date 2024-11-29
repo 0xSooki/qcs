@@ -20,6 +20,7 @@ class PlaceholderGate : public VisualGateAbstract {
     PlaceholderGate() {
       gate_.setSize(sf::Vector2f(size_, size_));
       gate_.setFillColor(sf::Color(255, 0 , 0 , 100));
+      gate_.setOrigin(gate_.getSize() / 2.f);
     }
 
     /**
@@ -33,6 +34,7 @@ class PlaceholderGate : public VisualGateAbstract {
       gate_.setSize(sf::Vector2f(size_, size_));
       gate_.setFillColor(sf::Color(255, 0 , 0 , 0));
       gate_.setPosition(pos);
+      gate_.setOrigin(gate_.getSize() / 2.f);
     }
 
     /**
@@ -75,6 +77,10 @@ class PlaceholderGate : public VisualGateAbstract {
     */
     const bool isVisible() const {
       return visible_;
+    }
+
+    const sf::Vector2f getSize() const {
+      return gate_.getSize();
     }
 };
 

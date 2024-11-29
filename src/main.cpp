@@ -21,6 +21,8 @@ int windowWidth = 1400;
 bool gateSelected = false;
 sf::Font font;
 std::vector<VisualQubit> qubits;
+bool cnotControl = false;
+std::shared_ptr<VisualQubit> controlQubit;
 
 int main() {
     std::filesystem::path fontPath = "../../resources/Roboto-Bold.ttf";
@@ -35,11 +37,11 @@ int main() {
     Simulator simulator;
     Result result;
 
-    VisualGate pauliX(sf::Vector2f(20, 20), "X", font);
-    VisualGate pauliY(sf::Vector2f(20, 140), "Y", font);
-    VisualGate pauliZ(sf::Vector2f(20, 260), "Z", font);
-    VisualGate hadamard(sf::Vector2f(20, 380), "H", font);
-    VisualGate cnot(sf::Vector2f(20, 500), "CNOT", font);
+    VisualGate pauliX(sf::Vector2f(65, 65), "X", font);
+    VisualGate pauliY(sf::Vector2f(65, 185), "Y", font);
+    VisualGate pauliZ(sf::Vector2f(65, 305), "Z", font);
+    VisualGate hadamard(sf::Vector2f(65, 425), "H", font);
+    VisualGate cnot(sf::Vector2f(65, 545), "CNOT", font);
 
     VisualCNOT vis(sf::Vector2f(260, 140), sf::Vector2f(260, 250));
 
@@ -114,27 +116,37 @@ int main() {
 
                         gateSelected = cnot.getSelected();
                     }
-                    if (qubit.isPlaceholderClicked(event.mouseButton.x, event.mouseButton.y) && gateSelected) {
-                        if (pauliX.getSelected())
-                            qubit.addGate("X", font, std::make_shared<PauliX>(std::vector<int>{0}));
-                        else if (pauliY.getSelected())
-                            qubit.addGate("Y", font, std::make_shared<PauliY>(std::vector<int>{0}));
-                        else if (pauliZ.getSelected())
-                            qubit.addGate("Z", font, std::make_shared<PauliZ>(std::vector<int>{0}));
-                        else if (hadamard.getSelected())
-                            qubit.addGate("H", font, std::make_shared<H>(std::vector<int>{0}));
-                        //else if (cnot.getSelected())
-                            //qubit.addGate("CNOT", font, );
+                    for (auto qubit = qubits.begin() ; qubit != qubits.end() ; qubit++) {
+                        if (qubit->isPlaceholderClicked(event.mouseButton.x, event.mouseButton.y) && gateSelected) {
+                            if (pauliX.getSelected())
+                                qubit->addGate("X", font);
+                            else if (pauliY.getSelected())
+                                qubit->addGate("Y", font);
+                            else if (pauliZ.getSelected())
+                                qubit->addGate("Z", font);
+                            else if (hadamard.getSelected())
+                                qubit->addGate("H", font);
+                            else if (cnot.getSelected()) {
+                                if (cnotControl) {
+                                    qubit->addCNOTGate(controlQubit);
+                                    cnotControl = false;
+                                } else {
+                                    controlQubit = std::make_shared<VisualQubit>(std::move(*qubit));
+                                    cnotControl = true;
+                                }
+                            }
 
-                            pauliX.setSelected(false);
-                            pauliY.setSelected(false);
-                            pauliZ.setSelected(false);
-                            hadamard.setSelected(false);
-                            cnot.setSelected(false);
-                            gateSelected = false;
+                            if (!cnotControl) {
+                                pauliX.setSelected(false);
+                                pauliY.setSelected(false);
+                                pauliZ.setSelected(false);
+                                hadamard.setSelected(false);
+                                cnot.setSelected(false);
+                                gateSelected = false;
+                            }
                         }
-                        if (i->isInitialStageClicked(event.mouseButton.x, event.mouseButton.y)) {
-                            i->switchInitialState();
+                        if (qubit->isInitialStageClicked(event.mouseButton.x, event.mouseButton.y)) {
+                            qubit->switchInitialState();
                         }
                     }
                     if (importButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
@@ -199,13 +211,11 @@ int main() {
         hadamard.draw(window);
         cnot.draw(window);
 
-        vis.draw(window);
-
         // draw line after gates
         window.draw(line);
 
         // draw the qubit(s)
-        for (auto qubit : qubits) {
+        for (VisualQubit qubit : qubits) {
             qubit.draw(window);
         }
 

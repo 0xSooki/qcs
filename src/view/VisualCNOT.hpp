@@ -23,7 +23,7 @@ class VisualCNOT {
     * @param pos Position where the gate should be drawn in GUI.
     */
     VisualCNOT(const sf::Vector2f& controlPos, const sf::Vector2f& targetPos) {
-      control_.setRadius(10);
+      control_.setRadius(15);
       control_.setFillColor(sf::Color::Black);
       control_.setPosition(controlPos);
       control_.setOrigin(control_.getGlobalBounds().width / 2.f + control_.getLocalBounds().left, control_.getGlobalBounds().height / 2.f + control_.getLocalBounds().top);
@@ -31,11 +31,12 @@ class VisualCNOT {
       target_.setRadius(20);
       target_.setFillColor(sf::Color::White);
       target_.setPosition(targetPos);
-      target_.setOutlineThickness(5.f);
+      target_.setOutlineThickness(5);
       target_.setOutlineColor(sf::Color::Black);
       target_.setOrigin(target_.getGlobalBounds().width / 2.f + target_.getLocalBounds().left, target_.getGlobalBounds().height / 2.f + target_.getLocalBounds().top);
 
-      connector_.setSize(sf::Vector2f((controlPos.y - targetPos.y), 3));
+      connector_.setSize(sf::Vector2f((controlPos.y - targetPos.y), 4));
+      connector_.setOrigin(connector_.getPosition() + sf::Vector2f(2, 0));
       connector_.setFillColor(sf::Color::Black);
       connector_.setPosition(controlPos);
       connector_.rotate(-90.f);
@@ -55,6 +56,24 @@ class VisualCNOT {
       window.draw(control_);
       window.draw(target_);
       window.draw(connector_);
+    }
+
+    /**
+    * @brief Get the position of the control dot.
+    *
+    * @return 2D vector of the position.
+    */
+    const sf::Vector2f getControlPosition() const {
+      return control_.getPosition();
+    }
+
+    /**
+    * @brief Get the position of the target dot.
+    *
+    * @return 2D vector of the position.
+    */
+    const sf::Vector2f getTargetPosition() const {
+      return target_.getPosition();
     }
 };
 

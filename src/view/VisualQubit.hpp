@@ -6,6 +6,8 @@
 
 #include "PlaceholderGate.hpp"
 #include "VisualGate.hpp"
+#include "VisualCNOT.hpp"
+#include "VisualQubit.hpp"
 
 #include "../gates/Gate.hpp"
 
@@ -20,6 +22,7 @@ private:
   sf::Text text_;
   int initialState_ = 0;
   std::vector<std::pair<std::shared_ptr<Gate>, VisualGate>> gates_;
+    std::vector<VisualCNOT> multiQubitGates_;
   PlaceholderGate placeholder_;
 
 public:
@@ -47,8 +50,8 @@ public:
     text_.setOrigin(text_.getGlobalBounds().width + text_.getLocalBounds().left, text_.getGlobalBounds().height / 2.f + text_.getLocalBounds().top);
     text_.setPosition(qubit_.getPosition() - sf::Vector2f(20, -2));
 
-    placeholder_.moveTo(pos + sf::Vector2f(20, -40));
-  }
+      placeholder_.moveTo(pos + sf::Vector2f(65, 0));
+    }
 
   /**
    * @brief Default destructor for the VisualQubit class.
@@ -64,27 +67,19 @@ public:
   {
     window.draw(qubit_);
     window.draw(text_);
+
     for (auto gate : gates_)
     {
       gate.second.draw(window);
     }
-    if (gates_.size() < 7)
+
+      for (VisualCNOT gate : multiQubitGates_) {
+        gate.draw(window);
+      }
+
+    if (gates_.size() + multiQubitGates_.size() < 7)
       placeholder_.draw(window);
   }
-
-    /**
-    * @brief Determines if the mouse click happened inside the placeholder gate.
-    *
-    * @param mouseX Mouse position on x axis.
-    * @param mouseY Mouse position on y axis.
-    * 
-    * @return True if the placeholder gate is clicked, false otherwise.
-    */
-    const bool isPlaceholderClicked(int mouseX, int mouseY) const {
-      return gates_.size() < 7
-        ? placeholder_.isPressed(mouseX, mouseY)
-        : false;
-    }
 
     /**
     * @brief Switches the initial state of the qubit to be either 0 or 1.
@@ -114,7 +109,7 @@ public:
     return text_.getGlobalBounds().contains(mouseX, mouseY);
   }
 
-  /**
+    /**
    * @brief Adds a new visual-logical gate pair to gates_.
    *
    * @param abbreviation Text that will be visible in the gate.
@@ -130,25 +125,81 @@ public:
     placeholder_.moveTo(newGate.second.getPosition() + sf::Vector2f(110, 0));
   }
 
-  /**
-   * @brief Get the Gates vector.
-   *
-   * @return std::vector<std::pair<Gate, VisualGate>>
-   */
-  std::vector<std::pair<std::shared_ptr<Gate>, VisualGate>> getGates()
-  {
-    return gates_;
-  }
+    void addCNOTGate(std::shared_ptr<VisualQubit> controlQubit) {
+      sf::Vector2f ctrlQubitPosition = controlQubit->getPlaceholderPosition();
+      std::cout << "placeholderposition before" << controlQubit->getPlaceholderPosition().x << std::endl;
+      sf::Vector2f controlPosition;
 
-  /**
-   * @brief Get the Initial State of the qubit.
-   *
-   * @return int
-   */
-  int getInitialState()
-  {
-    return initialState_;
-  }
+      ctrlQubitPosition.x > placeholder_.getPosition().x
+        ? controlPosition = ctrlQubitPosition
+        : controlPosition = sf::Vector2f(placeholder_.getPosition().x, ctrlQubitPosition.y);
+
+      VisualCNOT gate(controlPosition, sf::Vector2f(controlPosition.x, placeholder_.getPosition().y));
+      multiQubitGates_.push_back(gate);
+      placeholder_.moveTo(gate.getTargetPosition() + sf::Vector2f(110, 0));
+      controlQubit->movePlaceholder(gate.getControlPosition() + sf::Vector2f(110, 0));
+      std::cout << "placeholderposition after" << controlQubit->getPlaceholderPosition().x << std::endl;
+    }
+
+    /**
+     * @brief Get the Gates vector.
+     *
+     * @return std::vector<std::pair<Gate, VisualGate>>
+     */
+    std::vector<std::pair<std::shared_ptr<Gate>, VisualGate>> getGates()
+    {
+      return gates_;
+    }
+
+    /**
+    * @brief Determines if the mouse click happened inside the placeholder gate.
+    *
+    * @param mouseX Mouse position on x axis.
+    * @param mouseY Mouse position on y axis.
+    * 
+    * @return True if the placeholder gate is clicked, false otherwise.
+    */
+    const bool isPlaceholderClicked(int mouseX, int mouseY) const {
+      return gates_.size() + multiQubitGates_.size() < 7
+        ? placeholder_.isPressed(mouseX, mouseY)
+        : false;
+    }
+
+    /**
+     * @brief Get the Placeholder Position
+     * 
+     * @return const sf::Vector2f the position of the placeholder.
+     */
+    const sf::Vector2f getPlaceholderPosition() const {
+      return placeholder_.getPosition();
+    }
+
+    /**
+     * @brief Move placeholder gate to specified position.
+     * 
+     * @param newPosition Vector of the position the placeholder will be moved.
+     */
+    void movePlaceholder(sf::Vector2f newPosition) {
+      placeholder_.moveTo(newPosition);
+    }
+
+    /**
+     * @brief Overloaded = operator
+     * 
+     * @param qubit VisualQubit instance to be copied
+     * @return VisualQubit& 
+     */
+    VisualQubit& operator=(const VisualQubit& qubit) {
+      if (this != &qubit) {
+          qubit_ = qubit.qubit_;
+          text_ = qubit.text_;
+          initialState_ = qubit.initialState_;
+          gates_ = qubit.gates_;
+          multiQubitGates_ = qubit.multiQubitGates_;
+          placeholder_ = qubit.placeholder_;
+      }
+      return *this;
+    }
 };
 
 #endif // VISUAL_QUBIT_HPP

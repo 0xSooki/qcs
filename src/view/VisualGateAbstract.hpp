@@ -49,7 +49,7 @@ class VisualGateAbstract {
       int gateX = gate_.getPosition().x;
       int gateY = gate_.getPosition().y;
 
-      if ((gateX <= mouseX && mouseX <= (gateX + size_)) && (gateY <= mouseY && mouseY <= (gateY + size_)))
+      if (((gateX - (size_ / 2)) <= mouseX && mouseX <= (gateX + (size_ / 2))) && ((gateY - (size_ / 2)) <= mouseY && mouseY <= (gateY + (size_ / 2))))
         return true;
       else
         return false;
