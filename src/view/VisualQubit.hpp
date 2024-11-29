@@ -53,10 +53,24 @@ public:
       placeholder_.moveTo(pos + sf::Vector2f(65, 0));
     }
 
-  /**
-   * @brief Default destructor for the VisualQubit class.
-   */
-  ~VisualQubit() = default;
+    /**
+     * @brief Construct a new Visual Qubit object
+     * 
+     * @param qubit Qubit that will be copied
+     */
+    VisualQubit(const VisualQubit& qubit) {
+      qubit_ = qubit.qubit_;
+      text_ = qubit.text_;
+      initialState_ = qubit.initialState_;
+      gates_ = qubit.gates_;
+      multiQubitGates_ = qubit.multiQubitGates_;
+      placeholder_ = qubit.placeholder_;
+    }
+
+    /**
+    * @brief Default destructor for the VisualQubit class.
+    */
+    ~VisualQubit() = default;
 
   /**
    * @brief Draws the initial state, the qubit and it's gates to the window.
@@ -77,9 +91,9 @@ public:
         gate.draw(window);
       }
 
-    if (gates_.size() + multiQubitGates_.size() < 7)
-      placeholder_.draw(window);
-  }
+      if (gates_.size() + multiQubitGates_.size() < 7 && placeholder_.getPosition().x < 1060)
+        placeholder_.draw(window);
+    }
 
     /**
     * @brief Switches the initial state of the qubit to be either 0 or 1.
@@ -125,9 +139,13 @@ public:
     placeholder_.moveTo(newGate.second.getPosition() + sf::Vector2f(110, 0));
   }
 
-    void addCNOTGate(std::shared_ptr<VisualQubit> controlQubit) {
-      sf::Vector2f ctrlQubitPosition = controlQubit->getPlaceholderPosition();
-      std::cout << "placeholderposition before" << controlQubit->getPlaceholderPosition().x << std::endl;
+    /**
+     * @brief Adds a new CNOT gate to multiQubitGates_ that are drawn on screen
+     * 
+     * @param controlQubit Reference to the control qubit
+     */
+    void addCNOTGate(VisualQubit& controlQubit) {
+      sf::Vector2f ctrlQubitPosition = controlQubit.getPlaceholderPosition();
       sf::Vector2f controlPosition;
 
       ctrlQubitPosition.x > placeholder_.getPosition().x
@@ -137,8 +155,8 @@ public:
       VisualCNOT gate(controlPosition, sf::Vector2f(controlPosition.x, placeholder_.getPosition().y));
       multiQubitGates_.push_back(gate);
       placeholder_.moveTo(gate.getTargetPosition() + sf::Vector2f(110, 0));
-      controlQubit->movePlaceholder(gate.getControlPosition() + sf::Vector2f(110, 0));
-      std::cout << "placeholderposition after" << controlQubit->getPlaceholderPosition().x << std::endl;
+      controlQubit.movePlaceholder(gate.getControlPosition() + sf::Vector2f(110, 0));
+      std::cout << "placeholderposition after" << controlQubit.getPlaceholderPosition().x << std::endl;
     }
 
     /**

@@ -22,7 +22,7 @@ bool gateSelected = false;
 sf::Font font;
 std::vector<VisualQubit> qubits;
 bool cnotControl = false;
-std::shared_ptr<VisualQubit> controlQubit;
+std::vector<VisualQubit>::iterator controlQubit;
 
 int main() {
     std::filesystem::path fontPath = "../../resources/Roboto-Bold.ttf";
@@ -78,6 +78,7 @@ int main() {
                         hadamard.setSelected(false);
                         cnot.setSelected(false);
 
+                        cnotControl = false;
                         gateSelected = pauliX.getSelected();
                     }
                     if (pauliY.isPressed(event.mouseButton.x, event.mouseButton.y)) {
@@ -87,6 +88,7 @@ int main() {
                         hadamard.setSelected(false);
                         cnot.setSelected(false);
 
+                        cnotControl = false;
                         gateSelected = pauliY.getSelected();
                     }
                     if (pauliZ.isPressed(event.mouseButton.x, event.mouseButton.y)) {
@@ -96,6 +98,7 @@ int main() {
                         hadamard.setSelected(false);
                         cnot.setSelected(false);
 
+                        cnotControl = false;
                         gateSelected = pauliZ.getSelected();
                     }
                     if (hadamard.isPressed(event.mouseButton.x, event.mouseButton.y)) {
@@ -105,6 +108,7 @@ int main() {
                         hadamard.setSelected(!hadamard.getSelected());
                         cnot.setSelected(false);
 
+                        cnotControl = false;
                         gateSelected = hadamard.getSelected();
                     }
                     if (cnot.isPressed(event.mouseButton.x, event.mouseButton.y) && qubits.size() > 1) {
@@ -128,10 +132,10 @@ int main() {
                                 qubit->addGate("H", font);
                             else if (cnot.getSelected()) {
                                 if (cnotControl) {
-                                    qubit->addCNOTGate(controlQubit);
+                                    qubit->addCNOTGate(*controlQubit);
                                     cnotControl = false;
                                 } else {
-                                    controlQubit = std::make_shared<VisualQubit>(std::move(*qubit));
+                                    controlQubit = qubit;
                                     cnotControl = true;
                                 }
                             }

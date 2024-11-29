@@ -53,9 +53,9 @@ class VisualCNOT {
     * @param window Window where the gate will be drawn.
     */
     const void draw(sf::RenderWindow& window) const {
+      window.draw(connector_);
       window.draw(control_);
       window.draw(target_);
-      window.draw(connector_);
     }
 
     /**
