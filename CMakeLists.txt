@@ -10,6 +10,11 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 set(EIGEN3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/eigen")
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+set(JSONCPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/jsoncpp/include")
+include_directories(${JSONCPP_INCLUDE_DIR})
+set(JSONCPP_LIB_DIR "${CMAKE_SOURCE_DIR}/jsoncpp/build/lib")
+link_directories(${JSONCPP_LIB_DIR})
+
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -62,10 +67,12 @@ enable_testing()
 add_executable(
   tests
   tests/Simulator_test.cc
+  tests/File_IO_test.cc
 )
 target_link_libraries(
-tests
+  tests
   GTest::gtest_main
+  jsoncpp
 )
 
 include(GoogleTest)

@@ -57,6 +57,14 @@ public:
         return qubits_;
     }
 
+    /**
+     * @brief Adds a new qubit to the circuit.
+     * @param qubit The qubit index to be added.
+     */
+    void addQubit(int qubit) {
+        qubits_.push_back(qubit);
+    }
+    
 private:
     std::vector<int> qubits_;
     std::vector<std::shared_ptr<Gate>> gates_;
