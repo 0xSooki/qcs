@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
 #include "../src/io/File-io.hpp"
-#include <nlohmann/json.hpp> // Include the JSON for Modern C++ library
+#include <nlohmann/json.hpp> 
 #include <filesystem>
 #include <fstream>
 
 namespace fs = std::filesystem;
-using json = nlohmann::json; // Define `json` as `nlohmann::json`
+using json = nlohmann::json; 
 
 TEST(FileIOTest, WriteCircuitToFile) {
     // Create a quantum circuit
@@ -14,8 +14,6 @@ TEST(FileIOTest, WriteCircuitToFile) {
 
     // JSON file name
     std::string filename = "test_circuit.json";
-
-    // Write circuit to file and check no errors
     ASSERT_NO_THROW(writeCircuitToFile(circuit, filename));
     ASSERT_TRUE(fs::exists(filename)) << "File was not created.";
 
@@ -35,7 +33,7 @@ TEST(FileIOTest, WriteCircuitToFile) {
 
         file.close();
     } catch (...) {
-        fs::remove(filename); // Ensure cleanup on failure
+        fs::remove(filename); 
         throw;
     }
 
