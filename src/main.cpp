@@ -123,13 +123,13 @@ int main() {
                     for (auto qubit = qubits.begin() ; qubit != qubits.end() ; qubit++) {
                         if (qubit->isPlaceholderClicked(event.mouseButton.x, event.mouseButton.y) && gateSelected) {
                             if (pauliX.getSelected())
-                                qubit->addGate("X", font);
+                                qubit->addGate("X", font, std::make_shared<PauliX>(std::vector<int>{0}));
                             else if (pauliY.getSelected())
-                                qubit->addGate("Y", font);
+                                qubit->addGate("Y", font, std::make_shared<PauliY>(std::vector<int>{0}));
                             else if (pauliZ.getSelected())
-                                qubit->addGate("Z", font);
+                                qubit->addGate("Z", font, std::make_shared<PauliZ>(std::vector<int>{0}));
                             else if (hadamard.getSelected())
-                                qubit->addGate("H", font);
+                                qubit->addGate("H", font, std::make_shared<H>(std::vector<int>{0}));
                             else if (cnot.getSelected()) {
                                 if (cnotControl) {
                                     qubit->addCNOTGate(*controlQubit);
@@ -187,8 +187,13 @@ int main() {
                             removeQubit.setVisible(false);
                         }
                     }
+                    /*
                     if (evaluateButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
-                        QuantumCircuit circuit({qubit.getInitialState()});
+                        std::vector<int> initialStates;
+                        for (auto qubit = qubits.begin() ; qubit != qubits.end() ; qubit++) {
+                            initialStates.push_back(qubit->getInitialState());
+                        }
+                        QuantumCircuit circuit(initialStates);
                         std::vector<std::pair<std::shared_ptr<Gate>, VisualGate>> gates = qubit.getGates();
 
                         for (auto it = gates.begin() ; it != gates.end() ; it++) {
@@ -198,7 +203,7 @@ int main() {
 
                         Eigen::VectorXcd simulatorResult = simulator.run(circuit);
                         result = Result(sf::Vector2f(260, 240), simulatorResult, font);
-                    }
+                    }*/
 
                     PlaceholderGate::setVisible(gateSelected);
                 }
