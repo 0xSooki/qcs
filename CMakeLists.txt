@@ -10,10 +10,8 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 set(EIGEN3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/eigen")
 include_directories(${EIGEN3_INCLUDE_DIR})
 
-set(JSONCPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/jsoncpp/include")
+set(JSONCPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/json/single_include")
 include_directories(${JSONCPP_INCLUDE_DIR})
-set(JSONCPP_LIB_DIR "${CMAKE_SOURCE_DIR}/jsoncpp/build/lib")
-link_directories(${JSONCPP_LIB_DIR})
 
 include(FetchContent)
 FetchContent_Declare(SFML
@@ -72,7 +70,6 @@ add_executable(
 target_link_libraries(
   tests
   GTest::gtest_main
-  jsoncpp
 )
 
 include(GoogleTest)
