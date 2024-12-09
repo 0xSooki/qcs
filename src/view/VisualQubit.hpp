@@ -146,18 +146,20 @@ public:
      * @param controlQubit Reference to the control qubit
      */
     void addCNOTGate(VisualQubit& controlQubit) {
-      sf::Vector2f ctrlQubitPosition = controlQubit.getPlaceholderPosition();
-      sf::Vector2f controlPosition;
-
-      ctrlQubitPosition.x > placeholder_.getPosition().x
-        ? controlPosition = ctrlQubitPosition
-        : controlPosition = sf::Vector2f(placeholder_.getPosition().x, ctrlQubitPosition.y);
-
-      std::shared_ptr gate = std::make_shared<VisualCNOT>(controlPosition, sf::Vector2f(controlPosition.x, placeholder_.getPosition().y));
-      multiQubitGates_.push_back(std::make_pair(true, gate));
-      placeholder_.moveTo(gate->getTargetPosition() + sf::Vector2f(110, 0));
-      controlQubit.movePlaceholder(gate->getControlPosition() + sf::Vector2f(110, 0));
-      controlQubit.addCNOTGate(std::make_pair(false, gate));
+      if (controlQubit.getPlaceholderPosition() != placeholder_.getPosition()) {
+        sf::Vector2f ctrlQubitPosition = controlQubit.getPlaceholderPosition();
+        sf::Vector2f controlPosition;
+  
+        ctrlQubitPosition.x > placeholder_.getPosition().x
+          ? controlPosition = ctrlQubitPosition
+          : controlPosition = sf::Vector2f(placeholder_.getPosition().x, ctrlQubitPosition.y);
+  
+        std::shared_ptr gate = std::make_shared<VisualCNOT>(controlPosition, sf::Vector2f(controlPosition.x, placeholder_.getPosition().y));
+        multiQubitGates_.push_back(std::make_pair(true, gate));
+        placeholder_.moveTo(gate->getTargetPosition() + sf::Vector2f(110, 0));
+        controlQubit.movePlaceholder(gate->getControlPosition() + sf::Vector2f(110, 0));
+        controlQubit.addCNOTGate(std::make_pair(false, gate));
+      }
     }
 
     /**
