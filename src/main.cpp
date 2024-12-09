@@ -111,13 +111,13 @@ int main() {
                     }
                     if (qubit.isPlaceholderClicked(event.mouseButton.x, event.mouseButton.y) && gateSelected) {
                         if (pauliX.getSelected())
-                            qubit.addGate("X", font, PauliX({0}));
+                            qubit.addGate("X", font, std::make_shared<PauliX>(std::vector<int>{0}));
                         else if (pauliY.getSelected())
-                            qubit.addGate("Y", font, PauliY({0}));
+                            qubit.addGate("Y", font, std::make_shared<PauliY>(std::vector<int>{0}));
                         else if (pauliZ.getSelected())
-                            qubit.addGate("Z", font, PauliZ({0}));
+                            qubit.addGate("Z", font, std::make_shared<PauliZ>(std::vector<int>{0}));
                         else if (hadamard.getSelected())
-                            qubit.addGate("H", font, H({0}));
+                            qubit.addGate("H", font, std::make_shared<H>(std::vector<int>{0}));
                         //else if (cnot.getSelected())
                             //qubit.addGate("CNOT", font, );
 
@@ -153,10 +153,10 @@ int main() {
                     }
                     if (evaluateButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
                         QuantumCircuit circuit({qubit.getInitialState()});
-                        std::vector<std::pair<Gate, VisualGate>> gates = qubit.getGates();
+                        std::vector<std::pair<std::shared_ptr<Gate>, VisualGate>> gates = qubit.getGates();
 
                         for (auto it = gates.begin() ; it != gates.end() ; it++) {
-                            std::shared_ptr<Gate> ptr = std::make_shared<Gate>(std::move(it->first));
+                            std::shared_ptr<Gate> ptr = it->first;
                             circuit.addGate(ptr);
                         }
 

@@ -16,6 +16,8 @@
  */
 class Gate : public Eigen::MatrixXcd {
 public:
+  virtual std::string to_string() const = 0;  // Pure virtual function
+
   /**
    * @brief Virtual destructor for the Gate class.
    */
@@ -29,34 +31,36 @@ public:
    *
    * @param dim The dimension of the square matrix (number of rows and columns).
    */
-  Gate(int dim, std::vector<int> qubits, std::vector<int> controls = {})
-      : Eigen::MatrixXcd() {
-    this->resize(dim, dim);
+  Gate(int dim, const std::vector<int>& qubits, const std::vector<int>& controls = {})
+      : Eigen::MatrixXcd(dim, dim), qubits(qubits), controls(controls) {
     this->setZero();
-    this->qubits = qubits;
-    this->controls = controls;
-
-    // Projection operators
     P0x0 << 1, 0, 0, 0;
     P1x1 << 0, 0, 0, 1;
   }
 
   /**
-   * @brief Gives the string representation of the gate.
+   * @brief Returns the qubits the gate acts on.
    *
-   * @return The string representation of the gate.
+   * @return The vector of target qubits.
    */
+  const std::vector<int>& get_qubits() const { return qubits; }
+
+  /**
+   * @brief Returns the control qubits for the gate.
+   *
+   * @return The vector of control qubits.
+   */
+  const std::vector<int>& get_controls() const { return controls; }
 
   /**
    * @brief Returns the number of qubits the gate acts on.
    *
-   * @return The number of qubits the gate acts on.
+   * @return The number of target qubits.
    */
   int num_qubits() const { return qubits.size(); }
 
-  // TODO: Implement multi control gate support
   /**
-   * @brief Generates the unitary matrix for the gate.
+   * @brief Generates the unitary matrix for the gate, supporting multi-control gates.
    *
    * @param n The total number of qubits in the system.
    * @return The resulting operator matrix as an Eigen::MatrixXcd.
@@ -64,12 +68,13 @@ public:
   Eigen::MatrixXcd get_matrix(int n) {
     Eigen::MatrixXcd op = Eigen::MatrixXcd::Identity(1, 1);
     Eigen::MatrixXcd op2 = Eigen::MatrixXcd::Identity(1, 1);
-    if (qubits.size() > 1) {
+
+    if (!controls.empty()) {  // Multi-control gate logic
       for (int i = 0; i < n; ++i) {
-        if (i == qubits[1]) {
+        if (std::find(controls.begin(), controls.end(), i) != controls.end()) {
           op = Eigen::kroneckerProduct(op, P0x0).eval();
           op2 = Eigen::kroneckerProduct(op2, P1x1).eval();
-        } else if (i == qubits[0]) {
+        } else if (std::find(qubits.begin(), qubits.end(), i) != qubits.end()) {
           op = Eigen::kroneckerProduct(op, I).eval();
           op2 = Eigen::kroneckerProduct(op2, *this).eval();
         } else {
@@ -78,12 +83,12 @@ public:
         }
       }
       op += op2;
-    } else {
+    } else {  // Regular gates
       for (int i = 0; i < n; ++i) {
-        if (i == qubits[0]) {
+        if (std::find(qubits.begin(), qubits.end(), i) != qubits.end()) {
           op = Eigen::kroneckerProduct(op, *this).eval();
         } else {
-          op = Eigen::kroneckerProduct(I, op).eval();
+          op = Eigen::kroneckerProduct(op, I).eval();
         }
       }
     }
@@ -98,8 +103,8 @@ private:
   Eigen::MatrixXcd I = Eigen::MatrixXcd::Identity(2, 2);
 
 protected:
-  std::vector<int> qubits;
-  std::vector<int> controls;
+  std::vector<int> qubits;   // Target qubits for the gate
+  std::vector<int> controls; // Control qubits for the gate
 };
 
 #endif // GATE_HPP

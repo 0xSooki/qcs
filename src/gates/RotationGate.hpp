@@ -14,7 +14,7 @@ enum Axis {
   Z = 2,
 };
 
-std::complex<double> roundWithPrecision(std::complex<double> c) {
+inline std::complex<double> roundWithPrecision(std::complex<double> c) {
   double n = 4.0;
   std::complex<double> result(
       std::round(c.real() * pow(10.0, n)) / pow(10.0, n),
