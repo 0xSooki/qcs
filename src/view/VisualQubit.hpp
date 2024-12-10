@@ -220,6 +220,16 @@ class VisualQubit {
      * @return int the ID of the qubit
      */
     int getID() const { return id_; }
+
+  /**
+   * @brief Clears all gates from the qubit and moves placeholder to leftmost position
+   * 
+   */
+  void clearGates()
+  {
+    gates_ = {};
+    placeholder_.moveTo(qubit_.getPosition() + sf::Vector2f(20, -40));
+  }
 };
 
 #endif // VISUAL_QUBIT_HPP

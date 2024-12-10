@@ -29,6 +29,12 @@ public:
      * @param qubits The number of qubits in the circuit with their initial states.
      */
     QuantumCircuit(const std::vector<int>& qubits) : qubits_(qubits) {}
+
+    /**
+     * @brief Default constructor for a new Quantum Circuit object
+     * 
+     */
+    QuantumCircuit() : qubits_({}) {}
     
     /**
      * @brief Adds a gate to the quantum circuit.

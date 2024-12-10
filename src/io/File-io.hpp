@@ -72,6 +72,10 @@ void readCircuitFromFile(QuantumCircuit& circuit, const std::string& filename) {
             circuit.addGate(std::make_shared<PauliX>(qubits, controls));
         } else if (gateType == "Y") {
             circuit.addGate(std::make_shared<PauliY>(qubits, controls));
+        } else if (gateType == "Z") {
+            circuit.addGate(std::make_shared<PauliZ>(qubits, controls));
+        } else if (gateType == "H") {
+            circuit.addGate(std::make_shared<H>(qubits, controls));
         }
     }
 }
