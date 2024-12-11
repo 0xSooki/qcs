@@ -27,7 +27,6 @@ sf::Font font;
 std::vector<VisualQubit> qubits;
 bool cnotControl = false;
 std::vector<VisualQubit>::iterator controlQubit;
-std::vector<VisualQubit>::iterator targetQubit;
 
 int main() {
   std::filesystem::path fontPath = "../../resources/Roboto-Bold.ttf";
@@ -56,7 +55,7 @@ int main() {
   line.setPosition(sf::Vector2f(140, 0));
   line.rotate(90.f);
 
-  qubits.push_back(VisualQubit(sf::Vector2f(260, 140), font));
+  qubits.push_back(VisualQubit(sf::Vector2f(260, 140), font, 0));
   Button addQubit(sf::Vector2f(260, 250), "Add Qubit", font);
   Button removeQubit(sf::Vector2f(400, 250), "Remove Qubit", font, false);
 
@@ -132,30 +131,24 @@ int main() {
             if (qubit->isPlaceholderClicked(event.mouseButton.x,
                                             event.mouseButton.y) &&
                 gateSelected) {
-
               if (pauliX.getSelected()) {
-
                 auto x =
                     std::make_shared<PauliX>(std::vector<int>{qubit->getID()});
-                qubit->addGate("X", font,
-                               std::make_shared<PauliX>(std::vector<int>{0}));
+                qubit->addGate("X", font, x);
                 gates.push_back(x);
               } else if (pauliY.getSelected()) {
                 auto y =
                     std::make_shared<PauliY>(std::vector<int>{qubit->getID()});
-                qubit->addGate("Y", font,
-                               std::make_shared<PauliY>(std::vector<int>{0}));
+                qubit->addGate("Y", font, y);
                 gates.push_back(y);
               } else if (pauliZ.getSelected()) {
                 auto z =
                     std::make_shared<PauliZ>(std::vector<int>{qubit->getID()});
-                qubit->addGate("Z", font,
-                               std::make_shared<PauliZ>(std::vector<int>{0}));
+                qubit->addGate("Z", font, z);
                 gates.push_back(z);
               } else if (hadamard.getSelected()) {
                 auto h = std::make_shared<H>(std::vector<int>{qubit->getID()});
-                qubit->addGate("H", font,
-                               std::make_shared<H>(std::vector<int>{0}));
+                qubit->addGate("H", font, h);
                 gates.push_back(h);
               } else if (cnot.getSelected()) {
                 if (cnotControl) {
@@ -163,7 +156,7 @@ int main() {
                       std::vector<int>{qubit->getID(), controlQubit->getID()});
                   gates.push_back(cnot);
 
-                  qubit->addCNOTGate(*controlQubit);
+                  qubit->addCNOTGate(*controlQubit, cnot);
 
                   cnotControl = false;
                 } else {
@@ -209,7 +202,7 @@ int main() {
             // Here the function for saving the file
           }
           if (addQubit.isPressed(event.mouseButton.x, event.mouseButton.y) &&
-              qubits.size() < 5) {
+              qubits.size() < 4) {
             qubits.push_back(
                 VisualQubit(addQubit.getPosition(), font, qubits.size()));
             addQubit.moveTo(addQubit.getPosition() + sf::Vector2f(0, 110));
@@ -219,7 +212,17 @@ int main() {
           }
           if (removeQubit.isPressed(event.mouseButton.x, event.mouseButton.y) &&
               removeQubit.isVisible()) {
+            int id = qubits.back().getID();
+            for (auto gate = gates.begin(); gate != gates.end(); ) {
+              if ((*gate)->get_qubits().at(0) == id || (dynamic_cast<const CNOT*>((*gate).get()) && (*gate)->get_qubits().at(1) == id)) {
+                gate = gates.erase(gate);
+              } else {
+                gate++;
+              }
+            }
+
             qubits.pop_back();
+
             addQubit.moveTo(addQubit.getPosition() - sf::Vector2f(0, 110));
             removeQubit.moveTo(removeQubit.getPosition() -
                                sf::Vector2f(0, 110));
@@ -235,14 +238,13 @@ int main() {
               initialStates.push_back(qubit->getInitialState());
             }
             QuantumCircuit circuit(initialStates);
-            // std::vector<std::pair<std::shared_ptr<Gate>, VisualGate>> gates =
-            //     qubit.getGates();
+
             for (auto gate : gates) {
               circuit.addGate(gate);
             }
 
             Eigen::VectorXcd simulatorResult = simulator.run(circuit);
-            result = Result(sf::Vector2f(260, 240), simulatorResult, font);
+            result = Result(sf::Vector2f(1100, 120), simulatorResult, font);
           }
 
           PlaceholderGate::setVisible(gateSelected);

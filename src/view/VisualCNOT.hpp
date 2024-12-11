@@ -45,7 +45,7 @@ class VisualCNOT {
     /**
     * @brief Default destructor for the VisualGate class.
     */
-    virtual ~VisualCNOT() = default;
+    ~VisualCNOT() = default;
 
     /**
     * @brief Draws the gate to the window.
