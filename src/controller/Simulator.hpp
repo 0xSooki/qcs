@@ -55,11 +55,13 @@ public:
         state = Eigen::kroneckerProduct(state, one).eval();
       else
         state = Eigen::kroneckerProduct(state, zero).eval();
-    std::cout << (state) << std::endl;
+
+    // std::cout << (state) << std::endl;
+
     // Evaluate gates
     for (const auto &gate : circ.getGates()) {
       state = gate->get_matrix(qubits.size()) * state;
-      std::cout << gate->get_matrix(qubits.size()) << std::endl << std::endl;
+      // std::cout << gate->get_matrix(qubits.size()) << std::endl << std::endl;
     }
     return state;
   }
