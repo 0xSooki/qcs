@@ -3,25 +3,28 @@
 #include <memory>
 
 #include "../libs/tinyfiledialogs/tinyfiledialogs.hpp"
-#include "gates/Gate.hpp"
-#include "gates/RotationGate.hpp"
-#include "view/VisualCNOT.hpp"
+
+#include "io/File-io.hpp"
 
 #include "view/Button.hpp"
 #include "view/PlaceholderGate.hpp"
 #include "view/Result.hpp"
+#include "view/VisualCNOT.hpp"
 #include "view/VisualGate.hpp"
 #include "view/VisualQubit.hpp"
 
 #include "controller/QuantumCircuit.hpp"
 #include "controller/Simulator.hpp"
 
+#include "gates/Gate.hpp"
 #include "gates/Hadamard.hpp"
 #include "gates/PauliGates.hpp"
+#include "gates/RotationGate.hpp"
 
 int windowHeight = 800;
 int windowWidth = 1400;
 bool gateSelected = false;
+char const * fileFilterPatterns[1] = { "*.json" };
 std::vector<std::shared_ptr<Gate>> gates;
 sf::Font font;
 std::vector<VisualQubit> qubits;
@@ -37,10 +40,7 @@ int main() {
   }
 
   sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight),
-                          "Quantum Circuit Simulator");
-
-  Simulator simulator;
-  Result result;
+                          "Quantum Circuit Simulator", sf::Style::Close);
 
   VisualGate pauliX(sf::Vector2f(65, 65), "X", font);
   VisualGate pauliY(sf::Vector2f(65, 185), "Y", font);
@@ -48,22 +48,76 @@ int main() {
   VisualGate hadamard(sf::Vector2f(65, 425), "H", font);
   VisualGate cnot(sf::Vector2f(65, 545), "CNOT", font);
 
-  VisualCNOT vis(sf::Vector2f(260, 140), sf::Vector2f(260, 250));
-
   sf::RectangleShape line(sf::Vector2f(windowHeight, 5));
   line.setFillColor(sf::Color::Black);
   line.setPosition(sf::Vector2f(140, 0));
   line.rotate(90.f);
 
-  qubits.push_back(VisualQubit(sf::Vector2f(260, 140), font, 0));
-  Button addQubit(sf::Vector2f(260, 250), "Add Qubit", font);
-  Button removeQubit(sf::Vector2f(400, 250), "Remove Qubit", font, false);
-
+  Button addQubitButton(sf::Vector2f(260, 250), "Add Qubit", font);
+  Button removeQubitButton(sf::Vector2f(400, 250), "Remove Qubit", font, false);
   Button importButton(sf::Vector2f(windowWidth - 20, 20) - sf::Vector2f(190, 0),
                       "Import from file", font);
   Button exportButton(sf::Vector2f(windowWidth - 20, 20) - sf::Vector2f(360, 0),
                       "Export to file", font);
   Button evaluateButton(sf::Vector2f(160, 20), "Evaluate circuit", font);
+  Button clearButton(sf::Vector2f(360, 20), "Clear circuit", font);
+
+  Simulator simulator;
+  Result result;
+
+  qubits.push_back(VisualQubit(sf::Vector2f(260, 140), font, 0));
+
+  auto unselectGates = [&] () {
+    pauliX.setSelected(false);
+    pauliY.setSelected(false);
+    pauliZ.setSelected(false);
+    hadamard.setSelected(false);
+    cnot.setSelected(false);
+    gateSelected = false;
+  };
+
+  auto toCircuit = [&] () {
+    std::vector<int> initialStates;
+    for (auto qubit = qubits.begin(); qubit != qubits.end(); qubit++) {
+      initialStates.push_back(qubit->getInitialState());
+    }
+
+    QuantumCircuit circuit(initialStates);
+    for (auto gate : gates) {
+      circuit.addGate(gate);
+    }
+
+    return circuit;
+  };
+
+  auto clearCircuit = [&] () {
+    gates.clear();
+    for (auto qubit = qubits.begin(); qubit != qubits.end(); ) {
+      if (qubit != qubits.begin()) {
+        qubit->resetQubit();
+        qubit = qubits.erase(qubit);
+      } else {
+        qubit->resetQubit();
+        qubit++;
+      }
+    }
+
+    unselectGates();
+
+    addQubitButton.moveTo(sf::Vector2f(260, 250));
+    removeQubitButton.moveTo(sf::Vector2f(400, 250));
+    removeQubitButton.setVisible(false);
+    result = Result();
+  };
+
+  auto addQubit = [&] (int state) {
+    qubits.push_back(
+        VisualQubit(addQubitButton.getPosition(), font, qubits.size(), state));
+    addQubitButton.moveTo(addQubitButton.getPosition() + sf::Vector2f(0, 110));
+    removeQubitButton.moveTo(removeQubitButton.getPosition() +
+                       sf::Vector2f(0, 110));
+    removeQubitButton.setVisible(true);
+  };
 
   // run the program as long as the window is open
   while (window.isOpen()) {
@@ -166,12 +220,7 @@ int main() {
               }
 
               if (!cnotControl) {
-                pauliX.setSelected(false);
-                pauliY.setSelected(false);
-                pauliZ.setSelected(false);
-                hadamard.setSelected(false);
-                cnot.setSelected(false);
-                gateSelected = false;
+                unselectGates();
               }
             }
             if (qubit->isInitialStageClicked(event.mouseButton.x,
@@ -181,8 +230,7 @@ int main() {
           }
           if (importButton.isPressed(event.mouseButton.x,
                                      event.mouseButton.y)) {
-            std::cout << "Import button is pressed" << std::endl;
-            char const *selection = tinyfd_openFileDialog(
+            char const *filename = tinyfd_openFileDialog(
                 "Import a circuit from", // title
                 NULL,                    // optional initial directory
                 0,                       // number of filter patterns
@@ -191,27 +239,58 @@ int main() {
                 0     // forbids multiple selections
             );
 
-            std::cout << selection << std::endl;
+            if (filename != NULL) {
+              QuantumCircuit circuit;
+              readCircuitFromFile(circuit, filename);
 
-            // Use the selection like this: readFile(selection);
-            // And create it visually (probably some function to parse file)
-          }
-          if (exportButton.isPressed(event.mouseButton.x,
-                                     event.mouseButton.y)) {
-            std::cout << "Export button is pressed" << std::endl;
-            // Here the function for saving the file
-          }
-          if (addQubit.isPressed(event.mouseButton.x, event.mouseButton.y) &&
-              qubits.size() < 4) {
-            qubits.push_back(
-                VisualQubit(addQubit.getPosition(), font, qubits.size()));
-            addQubit.moveTo(addQubit.getPosition() + sf::Vector2f(0, 110));
-            removeQubit.moveTo(removeQubit.getPosition() +
+              clearCircuit();
+
+              qubits.pop_back();
+              addQubitButton.moveTo(addQubitButton.getPosition() - sf::Vector2f(0, 110));
+              removeQubitButton.moveTo(removeQubitButton.getPosition() -
                                sf::Vector2f(0, 110));
-            removeQubit.setVisible(true);
+
+              for (int initialState : circuit.getQubits()) {
+                addQubit(initialState);
+              }
+
+              gates = circuit.getGates();
+
+              for (auto gate : gates) {
+                if (dynamic_cast<const PauliX*>(gate.get())) {
+                  qubits[gate->get_qubits().at(0)].addGate("X", font, gate);
+                } else if (dynamic_cast<const PauliY*>(gate.get())) {
+                  qubits[gate->get_qubits().at(0)].addGate("Y", font, gate);
+                } else if (dynamic_cast<const PauliZ*>(gate.get())) {
+                  qubits[gate->get_qubits().at(0)].addGate("Z", font, gate);
+                } else if (dynamic_cast<const H*>(gate.get())) {
+                  qubits[gate->get_qubits().at(0)].addGate("H", font, gate);
+                } else if (dynamic_cast<const CNOT*>(gate.get())) {
+                  qubits[gate->get_qubits().at(0)].addCNOTGate(qubits[gate->get_qubits().at(1)], std::dynamic_pointer_cast<CNOT>(gate));
+                }
+              }
+            }
           }
-          if (removeQubit.isPressed(event.mouseButton.x, event.mouseButton.y) &&
-              removeQubit.isVisible()) {
+          if (exportButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
+            char const * filename = tinyfd_saveFileDialog(
+		        "Save circuit to", // title
+		        NULL, // optional initial directory
+		        1, // number of filter patterns
+		        fileFilterPatterns, // char const * lFilterPatterns[2] = { "*.txt", "*.jpg" };
+		        NULL // forbids multiple selections
+            );
+
+            if (filename != NULL) {
+              QuantumCircuit circuit = toCircuit();
+              writeCircuitToFile(circuit, filename);
+            }
+          }
+          if (addQubitButton.isPressed(event.mouseButton.x, event.mouseButton.y) &&
+              qubits.size() < 4) {
+            addQubit(0);
+          }
+          if (removeQubitButton.isPressed(event.mouseButton.x, event.mouseButton.y) &&
+              removeQubitButton.isVisible()) {
             int id = qubits.back().getID();
             for (auto gate = gates.begin(); gate != gates.end(); ) {
               if ((*gate)->get_qubits().at(0) == id || (dynamic_cast<const CNOT*>((*gate).get()) && (*gate)->get_qubits().at(1) == id)) {
@@ -221,30 +300,22 @@ int main() {
               }
             }
 
+            unselectGates();
             qubits.pop_back();
-
-            addQubit.moveTo(addQubit.getPosition() - sf::Vector2f(0, 110));
-            removeQubit.moveTo(removeQubit.getPosition() -
+            addQubitButton.moveTo(addQubitButton.getPosition() - sf::Vector2f(0, 110));
+            removeQubitButton.moveTo(removeQubitButton.getPosition() -
                                sf::Vector2f(0, 110));
             if (qubits.size() <= 1) {
-              removeQubit.setVisible(false);
+              removeQubitButton.setVisible(false);
             }
           }
-
-          if (evaluateButton.isPressed(event.mouseButton.x,
-                                       event.mouseButton.y)) {
-            std::vector<int> initialStates;
-            for (auto qubit = qubits.begin(); qubit != qubits.end(); qubit++) {
-              initialStates.push_back(qubit->getInitialState());
-            }
-            QuantumCircuit circuit(initialStates);
-
-            for (auto gate : gates) {
-              circuit.addGate(gate);
-            }
-
+          if (evaluateButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
+            QuantumCircuit circuit = toCircuit();
             Eigen::VectorXcd simulatorResult = simulator.run(circuit);
             result = Result(sf::Vector2f(1100, 120), simulatorResult, font);
+          }
+          if (clearButton.isPressed(event.mouseButton.x, event.mouseButton.y)) {
+            clearCircuit();
           }
 
           PlaceholderGate::setVisible(gateSelected);
@@ -274,10 +345,11 @@ int main() {
     importButton.draw(window);
     exportButton.draw(window);
     evaluateButton.draw(window);
+    clearButton.draw(window);
+    addQubitButton.draw(window);
+    removeQubitButton.draw(window);
 
     result.draw(window);
-    addQubit.draw(window);
-    removeQubit.draw(window);
 
     // end the current frame
     window.display();

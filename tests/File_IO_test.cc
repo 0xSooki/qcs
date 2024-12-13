@@ -26,7 +26,7 @@ TEST(FileIOTest, WriteCircuitToFile) {
         ASSERT_NO_THROW(parsed = json::parse(file)) << "Failed to parse JSON file.";
 
         // Validate the contents of the JSON
-        ASSERT_EQ(parsed["numQubits"], 2) << "Number of qubits does not match.";
+        ASSERT_EQ(parsed["qubitStates"].size(), 2) << "Number of qubits does not match.";
         ASSERT_EQ(parsed["gates"].size(), 1) << "Gate count does not match.";
         ASSERT_EQ(parsed["gates"][0]["gate"], "X") << "Gate type does not match.";
         ASSERT_EQ(parsed["gates"][0]["qubits"][0], 0) << "Qubit index does not match.";

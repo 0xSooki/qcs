@@ -23,6 +23,8 @@ class Button {
     *
     * @param pos Position where the button should be drawn in GUI.
     * @param text Text that will be visible inside the button.
+    * @param font The font that will be used for the button texts.
+    * @param visible Determines whether the button will be visible in UI, delauts to true.
     */
     Button(const sf::Vector2f& pos, const std::string& text, const sf::Font& font, bool visible = true) {
       text_.setFont(font);
@@ -47,7 +49,7 @@ class Button {
     /**
     * @brief Default destructor for the Button class.
     */
-    virtual ~Button() = default;
+    ~Button() = default;
 
     /**
     * @brief Draws the button with the text to the window.

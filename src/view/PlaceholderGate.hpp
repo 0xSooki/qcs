@@ -62,7 +62,7 @@ class PlaceholderGate : public VisualGateAbstract {
     }
 
     /**
-    * @brief Setter for 'visible_' variable
+    * @brief Static setter for 'visible_' variable
     *
     * @param visible the value to be set
     */
@@ -79,6 +79,11 @@ class PlaceholderGate : public VisualGateAbstract {
       return visible_;
     }
 
+    /**
+     * @brief Get the size of a gate object
+     * 
+     * @return const sf::Vector2f size of the gate
+     */
     const sf::Vector2f getSize() const {
       return gate_.getSize();
     }

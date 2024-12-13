@@ -9,15 +9,19 @@
  * @class PauliX
  * @brief A class representing a quantum rotation gate around the X axis axis by
  * an angle of pi inheriting from the RotationGate class
+ * 
+ * Matrix form:
+ * (0,0) (1,0)
+ * (1,0) (0,0)
  */
 class PauliX : public RotationGate {
 public:
   /**
    * @brief Constructs a PauliX gate, by calling the parent constructor with the
    * set parameters.
-   * Matrix form:
-   * (0,0) (1,0)
-   * (1,0) (0,0)
+   * 
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
   PauliX(std::vector<int> qubits, std::vector<int> controls = {})
       : RotationGate(X, -M_PI, qubits, controls) {
@@ -40,15 +44,19 @@ public:
  * @class PauliY
  * @brief A class representing a quantum rotation gate around the Y axis axis by
  * an angle of pi inheriting from the RotationGate class
+ * 
+ * Matrix form:
+ * (0,0) (0,-1)
+ * (0,1)  (0,0)
  */
 class PauliY : public RotationGate {
 public:
   /**
    * @brief Constructs a PauliY gate, by calling the parent constructor with the
    * set parameters.
-   *Matrix form :
-   * (0,0) (0,-1)
-   * (0,1)  (0,0)
+   * 
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
   PauliY(std::vector<int> qubits, std::vector<int> controls = {})
       : RotationGate(Y, -M_PI, qubits, controls) {
@@ -80,6 +88,9 @@ public:
   /**
    * @brief Constructs a PauliZ gate, by calling the parent constructor with the
    * set parameters.
+   * 
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
   PauliZ(std::vector<int> qubits, std::vector<int> controls = {})
       : RotationGate(Z, -M_PI, qubits, controls) {

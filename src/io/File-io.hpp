@@ -11,12 +11,15 @@ using json = nlohmann::json;
 
 /**
  * @brief Writes a quantum circuit to a JSON file.
+ * 
+ * @param circuit QuantumCircuit that will be written into file.
+ * @param filename Name of the file.
  */
 void writeCircuitToFile(const QuantumCircuit& circuit, const std::string& filename) {
     json j;
 
     // Add number of qubits to JSON
-    j["numQubits"] = circuit.getQubits().size();
+    j["qubitStates"] = circuit.getQubits();
 
     // Store the gates
     for (const auto& gate : circuit.getGates()) {
@@ -53,14 +56,17 @@ void writeCircuitToFile(const QuantumCircuit& circuit, const std::string& filena
 
 /**
  * @brief Reads a quantum circuit from a JSON file.
+ * 
+ * @param circuit QuantumCircuit where the contents of the file are added.
+ * @param filename Name of the file.
  */
 void readCircuitFromFile(QuantumCircuit& circuit, const std::string& filename) {
     std::ifstream file(filename);
     json j;
     file >> j;
 
-    for (int i = 0; i < j["numQubits"]; ++i) {
-        circuit.addQubit(i);
+    for (int i = 0; i < j["qubitStates"].size(); ++i) {
+        circuit.addQubit(j["qubitStates"].at(i));
     }
 
     for (const auto& gateJson : j["gates"]) {
@@ -72,6 +78,12 @@ void readCircuitFromFile(QuantumCircuit& circuit, const std::string& filename) {
             circuit.addGate(std::make_shared<PauliX>(qubits, controls));
         } else if (gateType == "Y") {
             circuit.addGate(std::make_shared<PauliY>(qubits, controls));
+        } else if (gateType == "Z") {
+            circuit.addGate(std::make_shared<PauliZ>(qubits, controls));
+        } else if (gateType == "H") {
+            circuit.addGate(std::make_shared<H>(qubits, controls));
+        } else if (gateType == "CNOT") {
+            circuit.addGate(std::make_shared<CNOT>(qubits, controls));
         }
     }
 }
