@@ -14,7 +14,7 @@ enum Axis {
   Z = 2,
 };
 
-std::complex<double> roundWithPrecision(std::complex<double> c) {
+inline std::complex<double> roundWithPrecision(std::complex<double> c) {
   double n = 4.0;
   std::complex<double> result(
       std::round(c.real() * pow(10.0, n)) / pow(10.0, n),
@@ -43,8 +43,9 @@ public:
    *
    * @param axis The axis of the rotation operation. One of x, y, z.
    * @param teta The angle of the rotation in radians (has a period of 4*pi)
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
-
   RotationGate(Axis axis, double teta, std::vector<int> qubits,
                std::vector<int> controls = {})
       : Gate(2, qubits, controls) {

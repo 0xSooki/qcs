@@ -15,7 +15,7 @@
  * @brief A class representing a quantum circuit with a set of quantum gates.
  * 
  * The QuantumCircuit class holds a collection of gates that operate on qubits.
- * A quantum circuit can be constructed by specifying the number of qubits and
+ * A quantum circuit can be constructed by specifying the number of qubits with specific states and
  * then adding gates to the circuit.
  * 
  * The quantum circuit supports operations like adding gates to the circuit
@@ -23,12 +23,19 @@
  */
 class QuantumCircuit {
 public:
-      /**
-     * @brief Constructs a QuantumCircuit with a specified number of qubits.
+    /**
+     * @brief Constructs a QuantumCircuit with qubits with their initial states.
      * 
-     * @param numQubits The number of qubits in the circuit.
+     * @param qubits The vector of qubits in the circuit with their initial states.
      */
-    QuantumCircuit(int numQubits) : numQubits_(numQubits) {}
+    QuantumCircuit(const std::vector<int>& qubits) : qubits_(qubits) {}
+
+    /**
+     * @brief Default constructor for a new Quantum Circuit object
+     * 
+     */
+    QuantumCircuit() : qubits_({}) {}
+    
     /**
      * @brief Adds a gate to the quantum circuit.
      * 
@@ -37,6 +44,7 @@ public:
     void addGate(const std::shared_ptr<Gate>& gate) {
         gates_.push_back(gate);
     }
+
     /**
      * @brief Returns the list of gates in the quantum circuit.
      * 
@@ -45,17 +53,26 @@ public:
     const std::vector<std::shared_ptr<Gate>>& getGates() const {
         return gates_;
     }
+
     /**
-     * @brief Returns the number of qubits in the quantum circuit.
+     * @brief Returns the vector of qubits in the quantum circuit.
      * 
-     * @return The number of qubits.
+     * @return The vector of qubits.
      */
-    int getNumQubits() const {
-        return numQubits_;
+    const std::vector<int>& getQubits() const {
+        return qubits_;
     }
 
+    /**
+     * @brief Adds a new qubit to the circuit.
+     * @param qubit The qubit state to be added.
+     */
+    void addQubit(int qubit) {
+        qubits_.push_back(qubit);
+    }
+    
 private:
-    int numQubits_;
+    std::vector<int> qubits_;
     std::vector<std::shared_ptr<Gate>> gates_;
 };
 

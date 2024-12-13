@@ -6,7 +6,7 @@
 #include <gtest/gtest.h>
 
 TEST(QuantumCircuitTest, AddPauliXGate) {
-  QuantumCircuit circ(1);
+  QuantumCircuit circ({0});
   circ.addGate(std::make_shared<PauliX>(PauliX(std::vector<int>{0})));
 
   Simulator sim;
@@ -18,7 +18,7 @@ TEST(QuantumCircuitTest, AddPauliXGate) {
 }
 
 TEST(QuantumCircuitTest, AddHadamardGate) {
-  QuantumCircuit circ(1);
+  QuantumCircuit circ({0});
   circ.addGate(std::make_shared<H>(H(std::vector<int>{0})));
 
   Simulator sim;
@@ -30,7 +30,7 @@ TEST(QuantumCircuitTest, AddHadamardGate) {
 }
 
 TEST(QuantumCircuitTest, AddCNOTGate) {
-  QuantumCircuit circ(2);
+  QuantumCircuit circ({0, 0});
   circ.addGate(std::make_shared<PauliX>(PauliX(std::vector<int>{0})));
   circ.addGate(std::make_shared<CNOT>(
       CNOT(std::vector<int>{0, 1}, std::vector<int>{0})));
@@ -44,7 +44,7 @@ TEST(QuantumCircuitTest, AddCNOTGate) {
 }
 
 TEST(QuantumCircuitTest, CombinedGates) {
-  QuantumCircuit circ(3);
+  QuantumCircuit circ({0, 0, 0});
   circ.addGate(std::make_shared<PauliX>(PauliX(std::vector<int>{0})));
   circ.addGate(std::make_shared<H>(H(std::vector<int>{0})));
   circ.addGate(std::make_shared<CNOT>(
@@ -59,7 +59,7 @@ TEST(QuantumCircuitTest, CombinedGates) {
 }
 
 TEST(SimulatorTest, EmptyCircuit) {
-  QuantumCircuit circ(1);
+  QuantumCircuit circ({0});
   Simulator sim;
   Eigen::VectorXcd result = sim.run(circ);
 
@@ -69,7 +69,7 @@ TEST(SimulatorTest, EmptyCircuit) {
 }
 
 TEST(SimulatorTest, ThreeQubitIdentity) {
-  QuantumCircuit circ(3);
+  QuantumCircuit circ({0, 0, 0});
   Simulator sim;
   Eigen::VectorXcd result = sim.run(circ);
 

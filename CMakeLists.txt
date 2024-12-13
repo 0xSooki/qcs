@@ -10,6 +10,9 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 set(EIGEN3_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/eigen")
 include_directories(${EIGEN3_INCLUDE_DIR})
 
+set(JSONCPP_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/libs/json/single_include")
+include_directories(${JSONCPP_INCLUDE_DIR})
+
 include(FetchContent)
 FetchContent_Declare(SFML
     GIT_REPOSITORY https://github.com/SFML/SFML.git
@@ -26,9 +29,11 @@ set(SRC_FILES
 
 # For IDEs
 set(HEADER_FILES
+    src/view/VisualCNOT.hpp
     src/view/VisualGate.hpp
     src/view/VisualQubit.hpp
     src/view/PlaceholderGate.hpp
+    src/view/Result.hpp
     src/view/VisualGateAbstract.hpp
     src/view/Button.hpp
     libs/tinyfiledialogs/tinyfiledialogs.hpp
@@ -61,9 +66,10 @@ enable_testing()
 add_executable(
   tests
   tests/Simulator_test.cc
+  tests/File_IO_test.cc
 )
 target_link_libraries(
-tests
+  tests
   GTest::gtest_main
 )
 
