@@ -11,6 +11,9 @@ using json = nlohmann::json;
 
 /**
  * @brief Writes a quantum circuit to a JSON file.
+ * 
+ * @param circuit QuantumCircuit that will be written into file.
+ * @param filename Name of the file.
  */
 void writeCircuitToFile(const QuantumCircuit& circuit, const std::string& filename) {
     json j;
@@ -53,6 +56,9 @@ void writeCircuitToFile(const QuantumCircuit& circuit, const std::string& filena
 
 /**
  * @brief Reads a quantum circuit from a JSON file.
+ * 
+ * @param circuit QuantumCircuit where the contents of the file are added.
+ * @param filename Name of the file.
  */
 void readCircuitFromFile(QuantumCircuit& circuit, const std::string& filename) {
     std::ifstream file(filename);

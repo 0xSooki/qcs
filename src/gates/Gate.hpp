@@ -30,6 +30,8 @@ public:
    * and sets all elements to zero.
    *
    * @param dim The dimension of the square matrix (number of rows and columns).
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
   Gate(int dim, const std::vector<int> &qubits,
        const std::vector<int> &controls = {})

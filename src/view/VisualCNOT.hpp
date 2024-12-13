@@ -5,8 +5,8 @@
 #include <iostream>
 
 /**
- * @class VisualGate
- * @brief A class visualizing a quantum gate in GUI.
+ * @class VisualCNOT
+ * @brief A class visualizing a CNOT gate in GUI.
  */
 class VisualCNOT {
   private:
@@ -16,11 +16,10 @@ class VisualCNOT {
 
   public:
     /**
-    * @brief Constructs a VisualGate with a specified position and abbreviation of the gate.
+    * @brief Constructs a VisualCNOT with a specified control and target qubit positions.
     *
-    * Initializes a square to specified position with specified abbreviation inside of the square.
-    *
-    * @param pos Position where the gate should be drawn in GUI.
+    * @param controlPos Position where the control end of the gate should be.
+    * @param targetPos Position where the target end of the gate should be.
     */
     VisualCNOT(const sf::Vector2f& controlPos, const sf::Vector2f& targetPos) {
       control_.setRadius(15);
@@ -43,7 +42,7 @@ class VisualCNOT {
     }
 
     /**
-    * @brief Default destructor for the VisualGate class.
+    * @brief Default destructor for the VisualCNOT class.
     */
     ~VisualCNOT() = default;
 

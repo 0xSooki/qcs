@@ -74,7 +74,7 @@ class Result {
      * @brief Overloaded = operator
      * 
      * @param result Result instance to be copied
-     * @return Result& 
+     * @return Result& copied Result object
      */
     Result& operator=(const Result& result) {
       if (this != &result) {

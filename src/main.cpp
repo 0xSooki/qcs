@@ -67,6 +67,15 @@ int main() {
 
   qubits.push_back(VisualQubit(sf::Vector2f(260, 140), font, 0));
 
+  auto unselectGates = [&] () {
+    pauliX.setSelected(false);
+    pauliY.setSelected(false);
+    pauliZ.setSelected(false);
+    hadamard.setSelected(false);
+    cnot.setSelected(false);
+    gateSelected = false;
+  };
+
   auto toCircuit = [&] () {
     std::vector<int> initialStates;
     for (auto qubit = qubits.begin(); qubit != qubits.end(); qubit++) {
@@ -83,7 +92,6 @@ int main() {
 
   auto clearCircuit = [&] () {
     gates.clear();
-    std::cout << gates.size() << std::endl;
     for (auto qubit = qubits.begin(); qubit != qubits.end(); ) {
       if (qubit != qubits.begin()) {
         qubit->resetQubit();
@@ -93,6 +101,8 @@ int main() {
         qubit++;
       }
     }
+
+    unselectGates();
 
     addQubitButton.moveTo(sf::Vector2f(260, 250));
     removeQubitButton.moveTo(sf::Vector2f(400, 250));
@@ -210,12 +220,7 @@ int main() {
               }
 
               if (!cnotControl) {
-                pauliX.setSelected(false);
-                pauliY.setSelected(false);
-                pauliZ.setSelected(false);
-                hadamard.setSelected(false);
-                cnot.setSelected(false);
-                gateSelected = false;
+                unselectGates();
               }
             }
             if (qubit->isInitialStageClicked(event.mouseButton.x,
@@ -295,6 +300,7 @@ int main() {
               }
             }
 
+            unselectGates();
             qubits.pop_back();
             addQubitButton.moveTo(addQubitButton.getPosition() - sf::Vector2f(0, 110));
             removeQubitButton.moveTo(removeQubitButton.getPosition() -

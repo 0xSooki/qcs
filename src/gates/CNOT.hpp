@@ -14,7 +14,7 @@ public:
    * target and control qubits.
    *
    * @param qubits The target and control qubits.
-   * @param controls The control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
   CNOT(std::vector<int> qubits, std::vector<int> controls = {})
       : Gate(2, qubits, controls) {

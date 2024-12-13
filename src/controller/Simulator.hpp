@@ -29,15 +29,16 @@ public:
    * little endian ordering meaning the least significant bit is the first
    * element eg. H|00> = |00> + |01> / sqrt(2)
    *
-   * @return The final state of the quantum circuit in little endian ordering.
    * @param circ The quantum circuit to be simulated.
+   * 
+   * @return The final state of the quantum circuit in little endian ordering.
    */
   Eigen::VectorXcd run(QuantumCircuit circ) const {
     std::vector<int> qubits = circ.getQubits();
     Eigen::VectorXcd mult(qubits.size());
     mult.setOnes();
 
-    // Initialize the state to |0>
+    // Initialize the state of qubit(s)
     Eigen::VectorXcd state(2);
     Eigen::VectorXcd zero(2);
     Eigen::VectorXcd one(2);
@@ -56,12 +57,9 @@ public:
       else
         state = Eigen::kroneckerProduct(state, zero).eval();
 
-    // std::cout << (state) << std::endl;
-
     // Evaluate gates
     for (const auto &gate : circ.getGates()) {
       state = gate->get_matrix(qubits.size()) * state;
-      // std::cout << gate->get_matrix(qubits.size()) << std::endl << std::endl;
     }
     return state;
   }

@@ -43,8 +43,9 @@ public:
    *
    * @param axis The axis of the rotation operation. One of x, y, z.
    * @param teta The angle of the rotation in radians (has a period of 4*pi)
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits, defaults to an empty vector.
    */
-
   RotationGate(Axis axis, double teta, std::vector<int> qubits,
                std::vector<int> controls = {})
       : Gate(2, qubits, controls) {

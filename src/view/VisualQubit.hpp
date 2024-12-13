@@ -36,6 +36,8 @@ class VisualQubit {
      *
      * @param pos Position where the qubit should be drawn in GUI.
      * @param font The font that will be used for the texts.
+     * @param id The id of the qubit.
+     * @param initialState Initial state of the qubit, defaults to 0.
      */
     VisualQubit(const sf::Vector2f &pos, const sf::Font &font, int id, int initialState = 0)
     : id_(id), initialState_(initialState) {
@@ -117,8 +119,8 @@ class VisualQubit {
      * @brief Adds a new visual-logical gate pair to gates_.
      *
      * @param abbreviation Text that will be visible in the gate.
-     * @param font The font that will be used inside the gate
-     * @param gate The logical gate that will be paired with the visual one
+     * @param font The font that will be used inside the gate.
+     * @param gate weak_ptr of the logical gate that will be paired with the visual one.
      */
     void addGate(const std::string &abbreviation, const sf::Font &font,
                  std::weak_ptr<Gate> gate) {
@@ -129,9 +131,10 @@ class VisualQubit {
     }
 
     /**
-     * @brief Adds a new CNOT gate to multiQubitGates_ that are drawn on screen
+     * @brief Adds a new CNOT gate to multiQubitGates_ that are drawn on screen.
      *
-     * @param controlQubit Reference to the control qubit
+     * @param controlQubit Reference to the control qubit.
+     * @param ptr weak_ptr of the logical gate that will be paired with the visual one.
      */
     void addCNOTGate(VisualQubit &controlQubit, std::weak_ptr<CNOT> ptr) {
       if (controlQubit.getPlaceholderPosition() != placeholder_.getPosition()) {
@@ -156,7 +159,7 @@ class VisualQubit {
     /**
      * @brief Get the Gates vector.
      *
-     * @return std::vector<std::pair<Gate, VisualGate>>
+     * @return std::vector<std::pair<Gate, VisualGate>> vector of single-qubit gates
      */
     std::vector<std::pair<std::weak_ptr<Gate>, VisualGate>> getGates() {
       return gates_;
@@ -185,6 +188,11 @@ class VisualQubit {
       return placeholder_.getPosition();
     }
 
+    /**
+     * @brief Get the Initial State of the qubit
+     * 
+     * @return const int 0 or 1 depending on the state
+     */
     const int getInitialState() const { return initialState_; }
 
     /**
@@ -221,15 +229,15 @@ class VisualQubit {
      */
     int getID() const { return id_; }
 
-  /**
-   * @brief Clears all gates from the qubit and moves placeholder to leftmost position
-   * 
-   */
-  void resetQubit() {
-    gates_.clear();
-    initialState_ = 0;
-    placeholder_.moveTo(qubit_.getPosition() + sf::Vector2f(65, 0));
-  }
+    /**
+     * @brief Clears all gates from the qubit and moves placeholder to leftmost position
+     * 
+     */
+    void resetQubit() {
+      gates_.clear();
+      initialState_ = 0;
+      placeholder_.moveTo(qubit_.getPosition() + sf::Vector2f(65, 0));
+    }
 };
 
 #endif // VISUAL_QUBIT_HPP

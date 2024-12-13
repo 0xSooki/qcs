@@ -23,6 +23,7 @@ class VisualGate : public VisualGateAbstract {
     *
     * @param pos Position where the gate should be drawn in GUI.
     * @param abbreviation Text that will be visible inside the gate square.
+    * @param font The font that will be used for the button texts.
     */
     VisualGate(const sf::Vector2f& pos, const std::string& abbreviation, const sf::Font& font) {
       gate_.setSize(sf::Vector2f(size_, size_));
