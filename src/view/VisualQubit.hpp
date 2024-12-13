@@ -21,7 +21,7 @@ class VisualQubit {
     sf::RectangleShape qubit_;
     sf::Text text_;
     int id_;
-    int initialState_ = 0;
+    int initialState_;
     std::vector<std::pair<std::weak_ptr<Gate>, VisualGate>> gates_;
     std::vector<std::pair<std::weak_ptr<CNOT>, VisualCNOT>>
         multiQubitGates_; // if the gate is target and the gate
@@ -37,8 +37,8 @@ class VisualQubit {
      * @param pos Position where the qubit should be drawn in GUI.
      * @param font The font that will be used for the texts.
      */
-    VisualQubit(const sf::Vector2f &pos, const sf::Font &font, int id)
-    : id_(id) {
+    VisualQubit(const sf::Vector2f &pos, const sf::Font &font, int id, int initialState = 0)
+    : id_(id), initialState_(initialState) {
       qubit_.setSize(sf::Vector2f(800, 5));
       qubit_.setFillColor(sf::Color::Black);
       qubit_.setPosition(pos);
@@ -225,10 +225,10 @@ class VisualQubit {
    * @brief Clears all gates from the qubit and moves placeholder to leftmost position
    * 
    */
-  void clearGates()
-  {
-    gates_ = {};
-    placeholder_.moveTo(qubit_.getPosition() + sf::Vector2f(20, -40));
+  void resetQubit() {
+    gates_.clear();
+    initialState_ = 0;
+    placeholder_.moveTo(qubit_.getPosition() + sf::Vector2f(65, 0));
   }
 };
 
