@@ -30,13 +30,14 @@ class VisualGate : public VisualGateAbstract {
       gate_.setPosition(pos);
       gate_.setOutlineThickness(5.f);
       gate_.setOutlineColor(sf::Color::Black);
+      gate_.setOrigin(gate_.getSize() / 2.f);
 
       text_.setFont(font);
       text_.setString(abbreviation);
       text_.setCharacterSize(32);
       text_.setFillColor(sf::Color::Black);
       text_.setOrigin(text_.getGlobalBounds().width / 2.f + text_.getLocalBounds().left, text_.getGlobalBounds().height / 2.f + text_.getLocalBounds().top);
-      text_.setPosition(gate_.getPosition() + (gate_.getSize() / 2.f));
+      text_.setPosition(gate_.getPosition());
     }
 
     /**
@@ -61,7 +62,7 @@ class VisualGate : public VisualGateAbstract {
     */
     void moveTo(sf::Vector2f newPosition) override {
       gate_.setPosition(newPosition);
-      text_.setPosition(newPosition + (gate_.getSize() / 2.f));
+      text_.setPosition(newPosition);
     }
 
     /**

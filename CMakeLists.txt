@@ -29,6 +29,7 @@ set(SRC_FILES
 
 # For IDEs
 set(HEADER_FILES
+    src/view/VisualCNOT.hpp
     src/view/VisualGate.hpp
     src/view/VisualQubit.hpp
     src/view/PlaceholderGate.hpp

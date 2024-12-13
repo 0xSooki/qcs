@@ -16,7 +16,7 @@
  */
 class Gate : public Eigen::MatrixXcd {
 public:
-  virtual std::string to_string() const = 0;  // Pure virtual function
+  virtual std::string to_string() const = 0; // Pure virtual function
 
   /**
    * @brief Virtual destructor for the Gate class.
@@ -31,7 +31,8 @@ public:
    *
    * @param dim The dimension of the square matrix (number of rows and columns).
    */
-  Gate(int dim, const std::vector<int>& qubits, const std::vector<int>& controls = {})
+  Gate(int dim, const std::vector<int> &qubits,
+       const std::vector<int> &controls = {})
       : Eigen::MatrixXcd(dim, dim), qubits(qubits), controls(controls) {
     this->setZero();
     P0x0 << 1, 0, 0, 0;
@@ -43,14 +44,14 @@ public:
    *
    * @return The vector of target qubits.
    */
-  const std::vector<int>& get_qubits() const { return qubits; }
+  const std::vector<int> &get_qubits() const { return qubits; }
 
   /**
    * @brief Returns the control qubits for the gate.
    *
    * @return The vector of control qubits.
    */
-  const std::vector<int>& get_controls() const { return controls; }
+  const std::vector<int> &get_controls() const { return controls; }
 
   /**
    * @brief Returns the number of qubits the gate acts on.
@@ -60,7 +61,8 @@ public:
   int num_qubits() const { return qubits.size(); }
 
   /**
-   * @brief Generates the unitary matrix for the gate, supporting multi-control gates.
+   * @brief Generates the unitary matrix for the gate, supporting multi-control
+   * gates.
    *
    * @param n The total number of qubits in the system.
    * @return The resulting operator matrix as an Eigen::MatrixXcd.
@@ -69,7 +71,7 @@ public:
     Eigen::MatrixXcd op = Eigen::MatrixXcd::Identity(1, 1);
     Eigen::MatrixXcd op2 = Eigen::MatrixXcd::Identity(1, 1);
 
-    if (!controls.empty()) {  // Multi-control gate logic
+    if (!controls.empty()) { // Multi-control gate logic
       for (int i = 0; i < n; ++i) {
         if (std::find(controls.begin(), controls.end(), i) != controls.end()) {
           op = Eigen::kroneckerProduct(op, P0x0).eval();
@@ -83,7 +85,7 @@ public:
         }
       }
       op += op2;
-    } else {  // Regular gates
+    } else { // Regular gates
       for (int i = 0; i < n; ++i) {
         if (std::find(qubits.begin(), qubits.end(), i) != qubits.end()) {
           op = Eigen::kroneckerProduct(op, *this).eval();

@@ -7,6 +7,15 @@
 
 class H : public Gate {
 public:
+  /**
+   * @brief Constructs a Hadamard gate with specified target and control qubits.
+   *
+   * Initializes a 2x2 matrix representing the Hadamard gate with the specified
+   * target and control qubits.
+   *
+   * @param qubits The target and control qubits.
+   * @param controls The control qubits.
+   */
   H(std::vector<int> qubits, std::vector<int> controls = {})
       : Gate(2, qubits, controls) {
     (*this)(0, 0) = 1;

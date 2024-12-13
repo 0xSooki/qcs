@@ -40,18 +40,28 @@ public:
     // Initialize the state to |0>
     Eigen::VectorXcd state(2);
     Eigen::VectorXcd zero(2);
+    Eigen::VectorXcd one(2);
     zero << 1, 0;
-    state << 1, 0;
+    one << 0, 1;
+
+    if (qubits[0] == 1)
+      state << one;
+    else
+      state << zero;
 
     // Create the initial state vector which is |0>^n
-    for (int i = 0; i < qubits.size() - 1; i++)
-      state = Eigen::kroneckerProduct(state, zero).eval();
+    for (int i = 1; i < qubits.size(); i++)
+      if (qubits[i] == 1)
+        state = Eigen::kroneckerProduct(state, one).eval();
+      else
+        state = Eigen::kroneckerProduct(state, zero).eval();
+
+    // std::cout << (state) << std::endl;
 
     // Evaluate gates
     for (const auto &gate : circ.getGates()) {
       state = gate->get_matrix(qubits.size()) * state;
-      std::cout << gate->get_matrix(qubits.size()) << std::endl
-                << std::endl;
+      // std::cout << gate->get_matrix(qubits.size()) << std::endl << std::endl;
     }
     return state;
   }
