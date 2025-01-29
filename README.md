@@ -1,4 +1,7 @@
-# Circuit simulator-2
+# Circuit simulator
+
+<img width="694" alt="qcs" src="https://github.com/user-attachments/assets/3d586f8c-3536-4fcb-b944-519d0fc53a62" />
+
 
 ## Basic Features (Minimum Requirements)
 The following are the essential features needed to pass the project. They are required but do not provide extra credit.
